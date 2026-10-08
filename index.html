@@ -381,6 +381,30 @@
       border-color: var(--danger-border);
     }
 
+    /* Water glass icons */
+    .glass-btn {
+      width: 38px;
+      height: 46px;
+      border: 2px solid #cbd5e1;
+      border-radius: 0.35rem 0.35rem 0.6rem 0.6rem;
+      background: #ffffff;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+    .glass-btn.filled {
+      background: #38bdf8;
+      border-color: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(56, 189, 248, 0.3);
+    }
+
     /* Tab content visibility */
     .tab-pane {
       display: none;
@@ -459,7 +483,7 @@
         <span>🗓️</span> <span>84 Günlük Təqvim</span>
       </li>
       <li class="nav-item" onclick="switchTab('health')">
-        <span>🩺</span> <span>Ferritin & Sağlamlıq</span>
+        <span>🩺</span> <span>Su, Addım & Ferritin</span>
       </li>
       <li class="nav-item" onclick="switchTab('stock')">
         <span>🎨</span> <span>Stok Platformaları</span>
@@ -574,8 +598,11 @@
       <!-- GÜNLÜK TEZ QEYDİYYAT (QUICK LOG) -->
       <div class="card">
         <div class="card-header">
-          <span class="card-title">⚡ Günün Sürətli İzləmə Paneli</span>
-          <span style="font-size: 0.8rem; color: var(--text-muted);">Tək toxunuşla qeyd et</span>
+          <div>
+            <span class="card-title">⚡ Günün Sürətli İzləmə Paneli</span>
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.15rem;">Bugünkü su və addımını tək toxunuşla qeyd et və tarixçəyə yaz</div>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="switchTab('health')">Tarixçəyə Bax ➔</button>
         </div>
         <div class="grid-4">
           <!-- Su -->
@@ -664,12 +691,15 @@
       </div>
     </div>
 
-    <!-- 4. FERRİTİN & SAĞLAMLIQ -->
+    <!-- 4. SU, ADDIM, FERRİTİN & SAĞLAMLIQ (TAM TARİXÇƏ & İZLƏMƏ İLƏ) -->
     <div id="tab-health" class="tab-pane">
       <div class="card">
         <div class="card-header">
-          <span class="card-title">🩺 Ferritin Bərpa Protokolu (10 ➔ 50 ng/mL)</span>
-          <span class="badge" style="background: var(--warning-subtle); color: #b45309; border-color: var(--warning-border);">Hazırkı Ferritin: 10 (Kritik)</span>
+          <div>
+            <span class="card-title">🩺 Su, Addım & Ferritin Bərpa Protokolu (10 ➔ 50 ng/mL)</span>
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">Gündəlik su və addımlarını interaktiv qeyd et, arxivlə və keçmiş günləri izlə</div>
+          </div>
+          <span class="badge" style="background: var(--warning-subtle); color: #b45309; border-color: var(--warning-border);">Ferritin: 10 ng/mL (Kritik)</span>
         </div>
 
         <div class="alert-box" style="background: #fffbeb; border-color: #fef08a;">
@@ -679,6 +709,73 @@
             <div style="font-size: 0.83rem; color: #78350f;">
               Dəmir preparatını (Hemo) qəbul etdikdən <b>2 saat əvvəl və 2 saat sonra</b> çay və kofe QƏTİYYƏN İÇMƏ! Əks halda dəmirin sorulması 80% bloklanır və halsızlıq keçmir.
             </div>
+          </div>
+        </div>
+
+        <!-- GÜNÜN İNTERAKTİV SU VƏ ADDIM İZLƏYİCİSİ -->
+        <div class="grid-2" style="margin-bottom: 1.25rem;">
+          
+          <!-- Su Stəkanları -->
+          <div style="background: #f8fafc; border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.65rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+              <span style="font-weight: 700; color: var(--text-main); font-size: 0.95rem;">💧 2.0L Su İzləyicisi (8 Stəkan):</span>
+              <span class="badge badge-primary" id="water-cup-count-badge">2 / 8 Stəkan (0.5 L)</span>
+            </div>
+            <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.75rem;">Stəkanların üzərinə toxunaraq içdiyin suyu doldur:</div>
+            
+            <div style="display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.75rem;" id="water-glasses-container">
+              <!-- 8 Glass buttons -->
+            </div>
+
+            <div style="display: flex; gap: 0.4rem;">
+              <button class="btn btn-secondary btn-sm" onclick="adjustWater(-0.25)">-1 Stəkan (250ml)</button>
+              <button class="btn btn-primary btn-sm" onclick="adjustWater(0.25)">+1 Stəkan (250ml)</button>
+              <button class="btn btn-secondary btn-sm" onclick="resetTodayWater()">Sıfırla</button>
+            </div>
+          </div>
+
+          <!-- Addım İzləyicisi -->
+          <div style="background: #f8fafc; border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.65rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+              <span style="font-weight: 700; color: var(--text-main); font-size: 0.95rem;">👟 Gündəlik Addım İzləyicisi:</span>
+              <span class="badge badge-success" id="steps-status-badge">6,000 / 12,000</span>
+            </div>
+            <div style="font-size: 1.6rem; font-weight: 800; color: var(--text-main); margin: 0.3rem 0;" id="steps-main-display">6,000 addım</div>
+            <div class="progress-track">
+              <div class="progress-fill" id="steps-progress-bar" style="width: 50%;"></div>
+            </div>
+
+            <div style="display: flex; gap: 0.35rem; margin-top: 0.75rem; flex-wrap: wrap;">
+              <button class="btn btn-secondary btn-sm" onclick="adjustSteps(-1000)">-1,000</button>
+              <button class="btn btn-primary btn-sm" onclick="adjustSteps(1000)">+1,000</button>
+              <button class="btn btn-primary btn-sm" onclick="adjustSteps(2500)">+2,500</button>
+              <input type="number" id="custom-steps-input" placeholder="Xüsusi addım" class="input-field" style="width: 120px; padding: 0.35rem 0.5rem; font-size: 0.8rem;">
+              <button class="btn btn-secondary btn-sm" onclick="setCustomSteps()">Daxil et</button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- GÜNÜN SU & ADDIMINI TARİXÇƏYƏ YAZ / ARXİVLƏ -->
+        <div style="background: #ffffff; border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.65rem; margin-bottom: 1.5rem;">
+          <div style="font-weight: 700; color: var(--text-main); font-size: 0.92rem; margin-bottom: 0.5rem;">💾 Günün Su & Addım Qeydini Tarixçəyə Arxivlə:</div>
+          <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+            <input type="date" id="health-log-date" class="input-field" style="flex: 1; min-width: 130px;">
+            <input type="number" step="0.1" id="health-log-water" placeholder="Su (Litr) məs: 2.0" class="input-field" style="flex: 1; min-width: 120px;">
+            <input type="number" id="health-log-steps" placeholder="Addım məs: 8500" class="input-field" style="flex: 1; min-width: 120px;">
+            <input type="text" id="health-log-note" placeholder="Qeyd (məs: Axşam gəzintisi, enerjili)" class="input-field" style="flex: 2; min-width: 180px;">
+            <button class="btn btn-success" onclick="saveDailyHealthLog()">💾 Tarixçəyə Saxla</button>
+          </div>
+        </div>
+
+        <!-- GÜNDƏLİK SU VƏ ADDIM TARİXÇƏSİ CƏDVƏLİ / SİYAHISI -->
+        <div style="background: #ffffff; border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.75rem; margin-bottom: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+            <span style="font-weight: 800; font-size: 0.95rem; color: var(--text-main);">📅 Gündəlik Su & Addım Tarixçəsi:</span>
+            <span class="badge badge-primary" id="health-logs-total-badge">0 Gün Qeyd Edilib</span>
+          </div>
+          <div id="health-history-list" style="max-height: 280px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem;">
+            <!-- Tarixçə qeydləri -->
           </div>
         </div>
 
@@ -720,11 +817,9 @@
           <span class="badge badge-primary" id="stock-page-badge">Ümumi: 561 / 1000</span>
         </div>
 
-        <!-- Platforma Kartları Qridi -->
         <div style="font-weight: 700; font-size: 0.9rem; color: var(--text-main); margin-bottom: 0.5rem;">🌐 Aktiv Stok Saytları:</div>
         <div class="grid-3" id="stock-platforms-grid" style="margin-bottom: 1.25rem;"></div>
 
-        <!-- Yeni Platforma Əlavə Et -->
         <div style="background: #f8fafc; border: 1px solid var(--border-color); padding: 1rem; border-radius: 0.65rem; margin-bottom: 1.25rem;">
           <div style="font-weight: 700; font-size: 0.88rem; color: var(--text-main); margin-bottom: 0.5rem;">➕ Yeni Stok Saytı Əlavə Et:</div>
           <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
@@ -735,7 +830,6 @@
           </div>
         </div>
 
-        <!-- Set Yükləmə Qeydiyyatı -->
         <div style="background: #ffffff; border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.65rem;">
           <div style="font-weight: 700; font-size: 0.9rem; color: var(--text-main); margin-bottom: 0.5rem;">📦 Yeni Set Yükləməsini Qeyd Et:</div>
           <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
@@ -795,7 +889,7 @@
       </div>
     </div>
 
-    <!-- 7. BORC & 800 AZN MAAŞ (TAM REDAKTƏ OLUNA BİLƏN ÜMUMİ BORC İLƏ) -->
+    <!-- 7. BORC & 800 AZN MAAŞ -->
     <div id="tab-debt" class="tab-pane">
       <div class="card">
         <div class="card-header">
@@ -808,28 +902,24 @@
 
         <!-- 4 ƏSAS BORC STATİSTİKA KARTI -->
         <div class="grid-4" style="margin-bottom: 1.25rem;">
-          <!-- Ümumi Borc -->
           <div style="background: #f8fafc; border: 1px solid var(--border-color); padding: 1rem; border-radius: 0.65rem;">
             <div style="font-size: 0.78rem; color: var(--text-muted);">🔴 Ümumi Borcum</div>
             <div style="font-size: 1.4rem; font-weight: 800; color: var(--danger);" id="debt-total-display">1,200 AZN</div>
             <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem;">Qalan Borc: <b id="debt-total-remain-display" style="color:var(--danger);">1,200 AZN</b></div>
           </div>
 
-          <!-- Hədəf Ödəniş -->
           <div style="background: #f8fafc; border: 1px solid var(--border-color); padding: 1rem; border-radius: 0.65rem;">
             <div style="font-size: 0.78rem; color: var(--text-muted);">🎯 İl Sonunadək Hədəf (<span id="debt-target-pct-label">50%</span>)</div>
             <div style="font-size: 1.4rem; font-weight: 800; color: var(--primary);" id="debt-target-display">600 AZN</div>
             <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem;">Hədəfə Qalan: <b id="debt-target-remain-display" style="color:var(--text-main);">600 AZN</b></div>
           </div>
 
-          <!-- Faktiki Ödənilən -->
           <div style="background: #f8fafc; border: 1px solid var(--border-color); padding: 1rem; border-radius: 0.65rem;">
             <div style="font-size: 0.78rem; color: var(--text-muted);">🟢 Faktiki Ödənilən</div>
             <div style="font-size: 1.4rem; font-weight: 800; color: var(--success);" id="debt-paid-display">0 AZN</div>
             <div style="font-size: 0.75rem; color: var(--success); margin-top: 0.2rem;" id="debt-paid-pct-display">0% ödənildi</div>
           </div>
 
-          <!-- Aylıq Maaş -->
           <div style="background: #f8fafc; border: 1px solid var(--border-color); padding: 1rem; border-radius: 0.65rem;">
             <div style="font-size: 0.78rem; color: var(--text-muted);">💵 Aylıq Maaş</div>
             <div style="font-size: 1.4rem; font-weight: 800; color: var(--text-main);" id="debt-salary-display">800 AZN</div>
@@ -857,7 +947,7 @@
         </div>
 
         <!-- ÜMUMİ BORCU VƏ PARAMETRLƏRİ REDAKTƏ ETMƏ FORMASI -->
-        <div id="debt-settings-panel" style="background: #f8fafc; border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.65rem; margin-bottom: 1.25rem;">
+        <div id="debt-settings-panel" style="background: #f8fafc; border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.65rem; margin-bottom: 1.25rem; display:none;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
             <span style="font-weight: 800; font-size: 0.92rem; color: var(--text-main);">✏️ Ümumi Borc və Maaş Parametrlərini Redaktə Et:</span>
             <button class="btn btn-secondary btn-sm" onclick="toggleDebtSettingsForm()">Gizlət</button>
@@ -1025,7 +1115,7 @@
     /* ==========================================
        DATA STRUCTURE & LOCALSTORAGE ENGINE
        ========================================== */
-    const STORAGE_KEY = 'SPRINT_84_VANILLA_STORE_V4';
+    const STORAGE_KEY = 'SPRINT_84_VANILLA_STORE_V5';
 
     const defaultSchedule = [
       { id: 't1', time: '07:30 - 08:30', title: 'Oyanış & Dəmir Protokolu', desc: '500ml ilıq su, Balqabaq tumu, Dəmir (Hemo) qəbul et. Kofe/Çay QƏTİYYƏN İÇMƏ!', checked: false },
@@ -1060,17 +1150,23 @@
       candleTarget: 2,
       candleSales: [],
       
-      // DEBT SYSTEM (CUSTOMIZABLE TOTAL DEBT & SALARY)
-      debtTotal: 1200,      // Total debt amount in AZN
-      debtTargetPct: 50,    // Target percentage (50%)
-      debtTarget: 600,      // Target amount (600 AZN)
-      monthlySalary: 800,   // Monthly salary in AZN
+      debtTotal: 1200,
+      debtTargetPct: 50,
+      debtTarget: 600,
+      monthlySalary: 800,
       debtPaid: 0,
       debtHistory: [],
 
+      // Daily Logs
       todayWater: 0.5,
       todaySteps: 6000,
       medsTaken: false,
+
+      // HEALTH HISTORY ARCHIVE (Persistent water and steps log)
+      healthLogs: [
+        { id: 'hl1', date: '2026-10-08', water: 0.5, steps: 6000, meds: true, note: '84 günlük zəfər startı' }
+      ],
+
       books: [
         { id: 'bk1', title: 'Atom Vərdişləri (James Clear)', totalPages: 320, readPages: 45 },
         { id: 'bk2', title: 'Dərin İş (Deep Work - Cal Newport)', totalPages: 280, readPages: 0 }
@@ -1408,31 +1504,177 @@
     }
 
     /* ==========================================
-       HEALTH & FERRITIN
+       HEALTH: WATER, STEPS & FERRITIN TRACKER + HISTORY
        ========================================== */
     function renderHealth() {
-      const list = document.getElementById('blood-test-list');
-      if (!list) return;
-      list.innerHTML = '';
+      // 8 Interactive Glasses
+      const glassesContainer = document.getElementById('water-glasses-container');
+      const cupBadge = document.getElementById('water-cup-count-badge');
+      const filledCups = Math.min(Math.round(store.todayWater / 0.25), 8);
 
-      if (store.bloodTests.length === 0) {
-        list.innerHTML = '<div style="font-size: 0.8rem; color: var(--text-light); padding: 0.5rem;">Hələ analiz qeyd edilməyib.</div>';
-        return;
+      if (cupBadge) cupBadge.innerText = `${filledCups} / 8 Stəkan (${store.todayWater.toFixed(2)} L)`;
+
+      if (glassesContainer) {
+        glassesContainer.innerHTML = '';
+        for (let i = 1; i <= 8; i++) {
+          const btn = document.createElement('div');
+          btn.className = `glass-btn ${i <= filledCups ? 'filled' : ''}`;
+          btn.innerHTML = `<span>💧</span><span style="font-size:0.65rem;">${i * 250}ml</span>`;
+          btn.title = `Stəkan ${i} (cəmi ${(i*0.25).toFixed(2)} L)`;
+          btn.onclick = () => {
+            store.todayWater = Number((i * 0.25).toFixed(2));
+            saveStore();
+          };
+          glassesContainer.appendChild(btn);
+        }
       }
 
-      store.bloodTests.forEach(test => {
-        const row = document.createElement('div');
-        row.className = 'item-row';
-        row.style.padding = '0.5rem 0.75rem';
-        row.innerHTML = `
-          <div>
-            <span style="font-weight: 700; color: var(--text-main);">${test.date}:</span>
-            <span style="font-weight: 800; color: var(--primary); margin-left: 0.5rem;">${test.value} ng/mL</span>
-          </div>
-          <button class="btn btn-danger btn-sm" onclick="deleteBloodTest('${test.id}')">Sil</button>
-        `;
-        list.appendChild(row);
-      });
+      // Steps display
+      const stepsDisplay = document.getElementById('steps-main-display');
+      const stepsBadge = document.getElementById('steps-status-badge');
+      const stepsBar = document.getElementById('steps-progress-bar');
+      if (stepsDisplay) stepsDisplay.innerText = `${store.todaySteps.toLocaleString()} addım`;
+      if (stepsBar) {
+        const pct = Math.min((store.todaySteps / 12000) * 100, 100);
+        stepsBar.style.width = `${pct}%`;
+      }
+      if (stepsBadge) {
+        if (store.todaySteps >= 10000) {
+          stepsBadge.className = 'badge badge-success';
+          stepsBadge.innerText = '👑 Zəfər Səviyyəsi (10k+)';
+        } else if (store.todaySteps >= 6000) {
+          stepsBadge.className = 'badge badge-primary';
+          stepsBadge.innerText = '🟢 Əla İntizam (6k - 10k)';
+        } else {
+          stepsBadge.className = 'badge';
+          stepsBadge.innerText = '🟡 Başlanğıc (< 6k)';
+        }
+      }
+
+      // Pre-fill log inputs
+      const logWater = document.getElementById('health-log-water');
+      const logSteps = document.getElementById('health-log-steps');
+      if (logWater && !logWater.value) logWater.value = store.todayWater;
+      if (logSteps && !logSteps.value) logSteps.value = store.todaySteps;
+
+      // Render Health History Archive List
+      const historyList = document.getElementById('health-history-list');
+      const totalLogsBadge = document.getElementById('health-logs-total-badge');
+      if (totalLogsBadge) totalLogsBadge.innerText = `${(store.healthLogs || []).length} Gün Qeyd Edilib`;
+
+      if (historyList) {
+        historyList.innerHTML = '';
+        if (!store.healthLogs || store.healthLogs.length === 0) {
+          historyList.innerHTML = '<div style="font-size: 0.85rem; color: var(--text-light); padding: 0.8rem; text-align:center;">Hələ sağlamlıq tarixi qeyd edilməyib. Yuxarıdakı formdan günün nəticəsini arxivlə! 💧👟</div>';
+        } else {
+          store.healthLogs.slice().reverse().forEach(log => {
+            const card = document.createElement('div');
+            card.style.background = '#f8fafc';
+            card.style.border = '1px solid var(--border-color)';
+            card.style.padding = '0.85rem 1rem';
+            card.style.borderRadius = '0.55rem';
+            card.style.display = 'flex';
+            card.style.justifyContent = 'space-between';
+            card.style.alignItems = 'center';
+            card.innerHTML = `
+              <div>
+                <div style="display:flex; align-items:center; gap:0.6rem;">
+                  <span style="font-weight: 800; font-size: 0.92rem; color: var(--text-main);">📅 ${log.date}</span>
+                  <span class="badge ${log.steps >= 6000 ? 'badge-success' : 'badge-primary'}">${log.steps.toLocaleString()} addım</span>
+                  <span class="badge badge-primary">💧 ${log.water} L</span>
+                  ${log.meds ? '<span class="badge badge-success">💊 Dəmir alındı</span>' : '<span class="badge badge-danger">💊 Dəmir yox</span>'}
+                </div>
+                ${log.note ? `<div style="font-size:0.78rem; color:var(--text-muted); margin-top:0.25rem;">📝 ${log.note}</div>` : ''}
+              </div>
+              <button class="btn btn-danger btn-sm" onclick="deleteHealthLog('${log.id}')">Sil</button>
+            `;
+            historyList.appendChild(card);
+          });
+        }
+      }
+
+      // Blood Tests list
+      const list = document.getElementById('blood-test-list');
+      if (list) {
+        list.innerHTML = '';
+        if (store.bloodTests.length === 0) {
+          list.innerHTML = '<div style="font-size: 0.8rem; color: var(--text-light); padding: 0.5rem;">Hələ analiz qeyd edilməyib.</div>';
+        } else {
+          store.bloodTests.forEach(test => {
+            const row = document.createElement('div');
+            row.className = 'item-row';
+            row.style.padding = '0.5rem 0.75rem';
+            row.innerHTML = `
+              <div>
+                <span style="font-weight: 700; color: var(--text-main);">${test.date}:</span>
+                <span style="font-weight: 800; color: var(--primary); margin-left: 0.5rem;">${test.value} ng/mL</span>
+              </div>
+              <button class="btn btn-danger btn-sm" onclick="deleteBloodTest('${test.id}')">Sil</button>
+            `;
+            list.appendChild(row);
+          });
+        }
+      }
+    }
+
+    function saveDailyHealthLog() {
+      const dateEl = document.getElementById('health-log-date');
+      const waterEl = document.getElementById('health-log-water');
+      const stepsEl = document.getElementById('health-log-steps');
+      const noteEl = document.getElementById('health-log-note');
+
+      const date = dateEl.value || new Date().toISOString().split('T')[0];
+      const water = Number(waterEl.value) || store.todayWater;
+      const steps = Number(stepsEl.value) || store.todaySteps;
+      const note = noteEl.value.trim();
+
+      if (!store.healthLogs) store.healthLogs = [];
+
+      // If record for this date exists, update it; otherwise add new
+      const existingIdx = store.healthLogs.findIndex(l => l.date === date);
+      if (existingIdx >= 0) {
+        store.healthLogs[existingIdx] = {
+          ...store.healthLogs[existingIdx],
+          water,
+          steps,
+          meds: store.medsTaken,
+          note
+        };
+      } else {
+        store.healthLogs.push({
+          id: 'hl_' + Date.now(),
+          date,
+          water,
+          steps,
+          meds: store.medsTaken,
+          note
+        });
+      }
+
+      noteEl.value = '';
+      saveStore();
+      alert(`🎉 ${date} tarixi üçün ${water}L su və ${steps.toLocaleString()} addım arxivə yazıldı!`);
+    }
+
+    function deleteHealthLog(id) {
+      if (confirm('Bu günün qeydini silmək istəyirsiniz?')) {
+        store.healthLogs = store.healthLogs.filter(l => l.id !== id);
+        saveStore();
+      }
+    }
+
+    function resetTodayWater() {
+      store.todayWater = 0;
+      saveStore();
+    }
+
+    function setCustomSteps() {
+      const inp = document.getElementById('custom-steps-input');
+      if (inp && inp.value) {
+        store.todaySteps = Math.max(Number(inp.value), 0);
+        inp.value = '';
+        saveStore();
+      }
     }
 
     function addBloodTest() {
@@ -1682,7 +1924,7 @@
     }
 
     /* ==========================================
-       DEBT & SALARY (CUSTOMIZABLE TOTAL DEBT & EDIT)
+       DEBT & SALARY
        ========================================== */
     function renderDebt() {
       const totalDebt = store.debtTotal || 1200;
@@ -1694,7 +1936,6 @@
       const totalRemain = Math.max(totalDebt - paid, 0);
       const targetRemain = Math.max(targetDebt - paid, 0);
 
-      // Displays
       const elTotal = document.getElementById('debt-total-display');
       const elTotalRemain = document.getElementById('debt-total-remain-display');
       const elTargetPctLabel = document.getElementById('debt-target-pct-label');
@@ -1718,7 +1959,6 @@
       if (elSalary) elSalary.innerText = `${salary.toLocaleString()} AZN`;
       if (elSalary3m) elSalary3m.innerText = `${(salary * 3).toLocaleString()} AZN`;
 
-      // Progress bars
       const pctTarget = targetDebt > 0 ? Math.min(Math.round((paid / targetDebt) * 100), 100) : 0;
       const pctTotal = totalDebt > 0 ? Math.min(Math.round((paid / totalDebt) * 100), 100) : 0;
 
@@ -1733,7 +1973,6 @@
       if (pTotalText) pTotalText.innerText = `${paid.toLocaleString()} / ${totalDebt.toLocaleString()} AZN (${pctTotal}%)`;
       if (pTotalBar) pTotalBar.style.width = `${pctTotal}%`;
 
-      // Edit inputs pre-fill
       const inpTotal = document.getElementById('edit-debt-total');
       const inpPct = document.getElementById('edit-debt-target-pct');
       const inpSalary = document.getElementById('edit-debt-salary');
@@ -1741,7 +1980,6 @@
       if (inpPct && !inpPct.value) inpPct.value = targetPct;
       if (inpSalary && !inpSalary.value) inpSalary.value = salary;
 
-      // History List
       const list = document.getElementById('debt-history-list');
       if (!list) return;
       list.innerHTML = '';
@@ -2135,10 +2373,12 @@
       const todayStr = new Date().toISOString().split('T')[0];
       const jDate = document.getElementById('journal-date');
       const hDate = document.getElementById('health-date-input');
+      const hlDate = document.getElementById('health-log-date');
       const cDate = document.getElementById('candle-date');
       const dDate = document.getElementById('debt-date');
       if (jDate) jDate.value = todayStr;
       if (hDate) hDate.value = todayStr;
+      if (hlDate) hlDate.value = todayStr;
       if (cDate) cDate.value = todayStr;
       if (dDate) dDate.value = todayStr;
     });

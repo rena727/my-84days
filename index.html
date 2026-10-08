@@ -375,6 +375,11 @@
       color: #059669;
       border-color: var(--success-border);
     }
+    .badge-danger {
+      background: var(--danger-subtle);
+      color: var(--danger);
+      border-color: var(--danger-border);
+    }
 
     /* Tab content visibility */
     .tab-pane {
@@ -463,7 +468,7 @@
         <span>🕯️</span> <span>Artlab Şam Satışları</span>
       </li>
       <li class="nav-item" onclick="switchTab('debt')">
-        <span>💰</span> <span>800 AZN & Borc 50%</span>
+        <span>💰</span> <span>Borc & 800 AZN Maaş</span>
       </li>
       <li class="nav-item" onclick="switchTab('books')">
         <span>📖</span> <span>Kitabxana & Oxu</span>
@@ -552,16 +557,16 @@
         <!-- Borc 50% Kartı -->
         <div class="card">
           <div class="card-header">
-            <span class="card-title">💰 Borcun 50%-i</span>
-            <span class="badge badge-primary" id="dash-debt-badge">Hədəf: 600 AZN</span>
+            <span class="card-title">💰 Borc İdarəetməsi</span>
+            <span class="badge badge-primary" id="dash-debt-badge">Hədəf: 50%</span>
           </div>
           <div style="font-size: 1.8rem; font-weight: 800; color: var(--text-main);" id="dash-debt-val">0 AZN</div>
-          <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">Ümumi hədəf 600 AZN ödəmək (Maaş: 800 AZN)</div>
+          <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">Ümumi Borc: <span id="dash-debt-total-label" style="font-weight:700; color:var(--text-main);">1200 AZN</span> · Qalan: <span id="dash-debt-remain-label" style="font-weight:700; color:#ef4444;">1200 AZN</span></div>
           <div class="progress-track">
             <div class="progress-fill" id="dash-debt-bar" style="width: 0%;"></div>
           </div>
           <div style="display: flex; gap: 0.4rem; margin-top: 0.75rem;">
-            <button class="btn btn-secondary btn-sm" onclick="switchTab('debt')">+ Borc Ödənişi Yaz</button>
+            <button class="btn btn-secondary btn-sm" onclick="switchTab('debt')">+ Ödəniş Yaz / Düzəlt</button>
           </div>
         </div>
       </div>
@@ -616,7 +621,7 @@
       </div>
     </div>
 
-    <!-- 2. SAATBASAAT REJİM (TAM EDIT & ADD & DELETE İMKANI İLƏ) -->
+    <!-- 2. SAATBASAAT REJİM -->
     <div id="tab-schedule" class="tab-pane">
       <div class="card">
         <div class="card-header">
@@ -640,9 +645,7 @@
           </div>
         </div>
 
-        <div id="schedule-list">
-          <!-- Dinamik doldurulacaq -->
-        </div>
+        <div id="schedule-list"></div>
       </div>
     </div>
 
@@ -657,9 +660,7 @@
           <div class="badge badge-primary" id="cal-completed-count">0 / 84 gün tamamlandı</div>
         </div>
 
-        <div class="calendar-grid" id="calendar-grid-container">
-          <!-- 84 Gün dinamik bura yerləşəcək -->
-        </div>
+        <div class="calendar-grid" id="calendar-grid-container"></div>
       </div>
     </div>
 
@@ -702,9 +703,7 @@
               <input type="number" id="health-val-input" placeholder="Ferritin (məs: 18)" class="input-field" style="flex: 1;">
               <button class="btn btn-primary btn-sm" onclick="addBloodTest()">Əlavə et</button>
             </div>
-            <div id="blood-test-list" style="max-height: 180px; overflow-y: auto;">
-              <!-- Analizlər -->
-            </div>
+            <div id="blood-test-list" style="max-height: 180px; overflow-y: auto;"></div>
           </div>
         </div>
       </div>
@@ -796,29 +795,89 @@
       </div>
     </div>
 
-    <!-- 7. 800 AZN MAAŞ & 50% BORC -->
+    <!-- 7. BORC & 800 AZN MAAŞ (TAM REDAKTƏ OLUNA BİLƏN ÜMUMİ BORC İLƏ) -->
     <div id="tab-debt" class="tab-pane">
       <div class="card">
         <div class="card-header">
-          <span class="card-title">💰 800 AZN Maaş və 50% Borc İdarəetməsi</span>
-          <span class="badge badge-primary" id="debt-header-badge">0 / 600 AZN Ödənilib</span>
+          <div>
+            <span class="card-title">💰 Ümumi Borc və 800 AZN Maaş İdarəetməsi</span>
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">Ümumi borcunu, hədəf faizini və maaşını istədiyin vaxt düzəlt və ödənişləri izlə</div>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="toggleDebtSettingsForm()">✏️ Ümumi Borcu Düzəlt</button>
         </div>
 
-        <div class="grid-3" style="margin-bottom: 1.25rem;">
+        <!-- 4 ƏSAS BORC STATİSTİKA KARTI -->
+        <div class="grid-4" style="margin-bottom: 1.25rem;">
+          <!-- Ümumi Borc -->
           <div style="background: #f8fafc; border: 1px solid var(--border-color); padding: 1rem; border-radius: 0.65rem;">
-            <div style="font-size: 0.78rem; color: var(--text-muted);">Aylıq Maaş</div>
-            <div style="font-size: 1.5rem; font-weight: 800; color: var(--text-main);">800 AZN</div>
-            <div style="font-size: 0.75rem; color: var(--text-muted);">3 Aylıq Toplam: 2,400 AZN</div>
+            <div style="font-size: 0.78rem; color: var(--text-muted);">🔴 Ümumi Borcum</div>
+            <div style="font-size: 1.4rem; font-weight: 800; color: var(--danger);" id="debt-total-display">1,200 AZN</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem;">Qalan Borc: <b id="debt-total-remain-display" style="color:var(--danger);">1,200 AZN</b></div>
           </div>
+
+          <!-- Hədəf Ödəniş -->
           <div style="background: #f8fafc; border: 1px solid var(--border-color); padding: 1rem; border-radius: 0.65rem;">
-            <div style="font-size: 0.78rem; color: var(--text-muted);">Hədəflənən Borc Ödənişi</div>
-            <div style="font-size: 1.5rem; font-weight: 800; color: var(--text-main);" id="debt-target-display">600 AZN</div>
-            <div style="font-size: 0.75rem; color: #10b981;">Ümumi borcun 50%-i</div>
+            <div style="font-size: 0.78rem; color: var(--text-muted);">🎯 İl Sonunadək Hədəf (<span id="debt-target-pct-label">50%</span>)</div>
+            <div style="font-size: 1.4rem; font-weight: 800; color: var(--primary);" id="debt-target-display">600 AZN</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem;">Hədəfə Qalan: <b id="debt-target-remain-display" style="color:var(--text-main);">600 AZN</b></div>
           </div>
+
+          <!-- Faktiki Ödənilən -->
           <div style="background: #f8fafc; border: 1px solid var(--border-color); padding: 1rem; border-radius: 0.65rem;">
-            <div style="font-size: 0.78rem; color: var(--text-muted);">Faktiki Ödənilən</div>
-            <div style="font-size: 1.5rem; font-weight: 800; color: #10b981;" id="debt-paid-display">0 AZN</div>
-            <div style="font-size: 0.75rem; color: var(--text-muted);">Qalan: <span id="debt-remain-display">600</span> AZN</div>
+            <div style="font-size: 0.78rem; color: var(--text-muted);">🟢 Faktiki Ödənilən</div>
+            <div style="font-size: 1.4rem; font-weight: 800; color: var(--success);" id="debt-paid-display">0 AZN</div>
+            <div style="font-size: 0.75rem; color: var(--success); margin-top: 0.2rem;" id="debt-paid-pct-display">0% ödənildi</div>
+          </div>
+
+          <!-- Aylıq Maaş -->
+          <div style="background: #f8fafc; border: 1px solid var(--border-color); padding: 1rem; border-radius: 0.65rem;">
+            <div style="font-size: 0.78rem; color: var(--text-muted);">💵 Aylıq Maaş</div>
+            <div style="font-size: 1.4rem; font-weight: 800; color: var(--text-main);" id="debt-salary-display">800 AZN</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem;">3 Aylıq: <b id="debt-salary-3m-display">2,400 AZN</b></div>
+          </div>
+        </div>
+
+        <!-- 2 İRƏLİLƏYİŞ BARI -->
+        <div style="background: #ffffff; border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.65rem; margin-bottom: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.25rem;">
+            <span>🎯 50% Borc Hədəfinin İrəliləyişi:</span>
+            <span id="debt-progress-target-text" style="color:var(--primary);">0 / 600 AZN (0%)</span>
+          </div>
+          <div class="progress-track" style="height: 10px; margin-bottom: 1rem;">
+            <div class="progress-fill" id="debt-progress-target-bar" style="width: 0%;"></div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.25rem;">
+            <span>🏆 Ümumi Borcun Tam Bağlanma Faiz:</span>
+            <span id="debt-progress-total-text" style="color:var(--success);">0 / 1200 AZN (0%)</span>
+          </div>
+          <div class="progress-track" style="height: 10px;">
+            <div class="progress-fill" id="debt-progress-total-bar" style="width: 0%; background: var(--success);"></div>
+          </div>
+        </div>
+
+        <!-- ÜMUMİ BORCU VƏ PARAMETRLƏRİ REDAKTƏ ETMƏ FORMASI -->
+        <div id="debt-settings-panel" style="background: #f8fafc; border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.65rem; margin-bottom: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
+            <span style="font-weight: 800; font-size: 0.92rem; color: var(--text-main);">✏️ Ümumi Borc və Maaş Parametrlərini Redaktə Et:</span>
+            <button class="btn btn-secondary btn-sm" onclick="toggleDebtSettingsForm()">Gizlət</button>
+          </div>
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <div style="flex: 2; min-width: 160px;">
+              <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 0.25rem;">Ümumi Borc (AZN):</label>
+              <input type="number" id="edit-debt-total" placeholder="Məs: 1200" class="input-field">
+            </div>
+            <div style="flex: 1; min-width: 120px;">
+              <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 0.25rem;">Hədəf Faizi (%):</label>
+              <input type="number" id="edit-debt-target-pct" placeholder="Məs: 50" class="input-field">
+            </div>
+            <div style="flex: 1.5; min-width: 140px;">
+              <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 0.25rem;">Aylıq Maaş (AZN):</label>
+              <input type="number" id="edit-debt-salary" placeholder="Məs: 800" class="input-field">
+            </div>
+            <div style="display: flex; align-items: flex-end;">
+              <button class="btn btn-primary" onclick="saveDebtSettings()">💾 Yadda Saxla</button>
+            </div>
           </div>
         </div>
 
@@ -867,7 +926,7 @@
       </div>
     </div>
 
-    <!-- 9. ALMAN DİLİ ÇELƏNCLƏRİ (ONLY CHALLENGES, XP & LEVEL) -->
+    <!-- 9. ALMAN DİLİ ÇELƏNCLƏRİ -->
     <div id="tab-german" class="tab-pane">
       <div class="card">
         <div class="card-header">
@@ -912,7 +971,7 @@
           </div>
         </div>
 
-        <!-- TAMAMLANMIŞ ÇELƏNCLƏRİN MARAQLI VƏ DETALLI SİYAHISI -->
+        <!-- TAMAMLANMIŞ ÇELƏNCLƏRİN SİYAHISI -->
         <div style="background: #ffffff; border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.75rem;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
             <span style="font-weight: 800; font-size: 0.95rem; color: var(--text-main);">🏆 Zəfər Siyahısı: Tamamladığım Çelənclər</span>
@@ -966,7 +1025,7 @@
     /* ==========================================
        DATA STRUCTURE & LOCALSTORAGE ENGINE
        ========================================== */
-    const STORAGE_KEY = 'SPRINT_84_VANILLA_STORE_V3';
+    const STORAGE_KEY = 'SPRINT_84_VANILLA_STORE_V4';
 
     const defaultSchedule = [
       { id: 't1', time: '07:30 - 08:30', title: 'Oyanış & Dəmir Protokolu', desc: '500ml ilıq su, Balqabaq tumu, Dəmir (Hemo) qəbul et. Kofe/Çay QƏTİYYƏN İÇMƏ!', checked: false },
@@ -1000,9 +1059,15 @@
       stockHistory: [],
       candleTarget: 2,
       candleSales: [],
-      debtTarget: 600,
+      
+      // DEBT SYSTEM (CUSTOMIZABLE TOTAL DEBT & SALARY)
+      debtTotal: 1200,      // Total debt amount in AZN
+      debtTargetPct: 50,    // Target percentage (50%)
+      debtTarget: 600,      // Target amount (600 AZN)
+      monthlySalary: 800,   // Monthly salary in AZN
       debtPaid: 0,
       debtHistory: [],
+
       todayWater: 0.5,
       todaySteps: 6000,
       medsTaken: false,
@@ -1147,9 +1212,20 @@
       // Debt
       const debtVal = document.getElementById('dash-debt-val');
       const debtBar = document.getElementById('dash-debt-bar');
-      if (debtVal) debtVal.innerText = store.debtPaid + ' AZN';
+      const debtBadge = document.getElementById('dash-debt-badge');
+      const debtTotalLbl = document.getElementById('dash-debt-total-label');
+      const debtRemainLbl = document.getElementById('dash-debt-remain-label');
+
+      const targetDebt = store.debtTarget || Math.round(store.debtTotal * ((store.debtTargetPct || 50) / 100));
+      const totalRemain = Math.max(store.debtTotal - store.debtPaid, 0);
+
+      if (debtVal) debtVal.innerText = `${store.debtPaid} / ${targetDebt} AZN`;
+      if (debtBadge) debtBadge.innerText = `Hədəf: ${store.debtTargetPct || 50}% (${targetDebt} AZN)`;
+      if (debtTotalLbl) debtTotalLbl.innerText = `${store.debtTotal} AZN`;
+      if (debtRemainLbl) debtRemainLbl.innerText = `${totalRemain} AZN`;
+
       if (debtBar) {
-        const pct = Math.min((store.debtPaid / store.debtTarget) * 100, 100);
+        const pct = Math.min((store.debtPaid / (targetDebt || 1)) * 100, 100);
         debtBar.style.width = pct + '%';
       }
 
@@ -1169,7 +1245,7 @@
     }
 
     /* ==========================================
-       SCHEDULE (CUSTOMIZABLE, EDITABLE & DELETABLE)
+       SCHEDULE
        ========================================== */
     function renderSchedule() {
       const container = document.getElementById('schedule-list');
@@ -1230,7 +1306,6 @@
 
       const editId = editIdEl.value;
       if (editId) {
-        // Update existing
         const item = store.schedule.find(x => x.id === editId);
         if (item) {
           item.time = timeEl.value.trim();
@@ -1239,7 +1314,6 @@
         }
         cancelEditSchedule();
       } else {
-        // Add new
         store.schedule.push({
           id: 't_' + Date.now(),
           time: timeEl.value.trim(),
@@ -1432,7 +1506,6 @@
         });
       }
 
-      // History
       const list = document.getElementById('stock-history-list');
       if (list) {
         list.innerHTML = '';
@@ -1609,19 +1682,66 @@
     }
 
     /* ==========================================
-       DEBT & SALARY
+       DEBT & SALARY (CUSTOMIZABLE TOTAL DEBT & EDIT)
        ========================================== */
     function renderDebt() {
-      const targetDisp = document.getElementById('debt-target-display');
-      const paidDisp = document.getElementById('debt-paid-display');
-      const remainDisp = document.getElementById('debt-remain-display');
-      const headerBadge = document.getElementById('debt-header-badge');
+      const totalDebt = store.debtTotal || 1200;
+      const targetPct = store.debtTargetPct || 50;
+      const targetDebt = store.debtTarget || Math.round(totalDebt * (targetPct / 100));
+      const salary = store.monthlySalary || 800;
+      const paid = store.debtPaid || 0;
 
-      if (targetDisp) targetDisp.innerText = store.debtTarget + ' AZN';
-      if (paidDisp) paidDisp.innerText = store.debtPaid + ' AZN';
-      if (remainDisp) remainDisp.innerText = Math.max(store.debtTarget - store.debtPaid, 0);
-      if (headerBadge) headerBadge.innerText = `${store.debtPaid} / ${store.debtTarget} AZN Ödənilib`;
+      const totalRemain = Math.max(totalDebt - paid, 0);
+      const targetRemain = Math.max(targetDebt - paid, 0);
 
+      // Displays
+      const elTotal = document.getElementById('debt-total-display');
+      const elTotalRemain = document.getElementById('debt-total-remain-display');
+      const elTargetPctLabel = document.getElementById('debt-target-pct-label');
+      const elTarget = document.getElementById('debt-target-display');
+      const elTargetRemain = document.getElementById('debt-target-remain-display');
+      const elPaid = document.getElementById('debt-paid-display');
+      const elPaidPct = document.getElementById('debt-paid-pct-display');
+      const elSalary = document.getElementById('debt-salary-display');
+      const elSalary3m = document.getElementById('debt-salary-3m-display');
+
+      if (elTotal) elTotal.innerText = `${totalDebt.toLocaleString()} AZN`;
+      if (elTotalRemain) elTotalRemain.innerText = `${totalRemain.toLocaleString()} AZN`;
+      if (elTargetPctLabel) elTargetPctLabel.innerText = `${targetPct}%`;
+      if (elTarget) elTarget.innerText = `${targetDebt.toLocaleString()} AZN`;
+      if (elTargetRemain) elTargetRemain.innerText = `${targetRemain.toLocaleString()} AZN`;
+      if (elPaid) elPaid.innerText = `${paid.toLocaleString()} AZN`;
+      if (elPaidPct) {
+        const pctOfTotal = totalDebt > 0 ? Math.round((paid / totalDebt) * 100) : 0;
+        elPaidPct.innerText = `${pctOfTotal}% ümumi borcdan bağlandı`;
+      }
+      if (elSalary) elSalary.innerText = `${salary.toLocaleString()} AZN`;
+      if (elSalary3m) elSalary3m.innerText = `${(salary * 3).toLocaleString()} AZN`;
+
+      // Progress bars
+      const pctTarget = targetDebt > 0 ? Math.min(Math.round((paid / targetDebt) * 100), 100) : 0;
+      const pctTotal = totalDebt > 0 ? Math.min(Math.round((paid / totalDebt) * 100), 100) : 0;
+
+      const pTargetText = document.getElementById('debt-progress-target-text');
+      const pTargetBar = document.getElementById('debt-progress-target-bar');
+      const pTotalText = document.getElementById('debt-progress-total-text');
+      const pTotalBar = document.getElementById('debt-progress-total-bar');
+
+      if (pTargetText) pTargetText.innerText = `${paid.toLocaleString()} / ${targetDebt.toLocaleString()} AZN (${pctTarget}%)`;
+      if (pTargetBar) pTargetBar.style.width = `${pctTarget}%`;
+
+      if (pTotalText) pTotalText.innerText = `${paid.toLocaleString()} / ${totalDebt.toLocaleString()} AZN (${pctTotal}%)`;
+      if (pTotalBar) pTotalBar.style.width = `${pctTotal}%`;
+
+      // Edit inputs pre-fill
+      const inpTotal = document.getElementById('edit-debt-total');
+      const inpPct = document.getElementById('edit-debt-target-pct');
+      const inpSalary = document.getElementById('edit-debt-salary');
+      if (inpTotal && !inpTotal.value) inpTotal.value = totalDebt;
+      if (inpPct && !inpPct.value) inpPct.value = targetPct;
+      if (inpSalary && !inpSalary.value) inpSalary.value = salary;
+
+      // History List
       const list = document.getElementById('debt-history-list');
       if (!list) return;
       list.innerHTML = '';
@@ -1644,6 +1764,36 @@
         `;
         list.appendChild(row);
       });
+    }
+
+    function toggleDebtSettingsForm() {
+      const panel = document.getElementById('debt-settings-panel');
+      if (panel) {
+        panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+      }
+    }
+
+    function saveDebtSettings() {
+      const inpTotal = document.getElementById('edit-debt-total');
+      const inpPct = document.getElementById('edit-debt-target-pct');
+      const inpSalary = document.getElementById('edit-debt-salary');
+
+      const total = Number(inpTotal.value);
+      const pct = Number(inpPct.value) || 50;
+      const salary = Number(inpSalary.value) || 800;
+
+      if (!total || total <= 0) {
+        alert('Zəhmət olmasa düzgün ümumi borc məbləği daxil edin!');
+        return;
+      }
+
+      store.debtTotal = total;
+      store.debtTargetPct = pct;
+      store.debtTarget = Math.round(total * (pct / 100));
+      store.monthlySalary = salary;
+
+      saveStore();
+      alert('🎉 Borc və Maaş parametrləri uğurla yadda saxlanıldı!');
     }
 
     function addDebtPayment() {
@@ -1817,7 +1967,6 @@
       if (challengeDesc) challengeDesc.innerText = currentChallengeText;
       if (totalCountBadge) totalCountBadge.innerText = `${store.completedChallenges.length} Tamamlandı`;
 
-      // Completed challenges
       const histList = document.getElementById('completed-challenges-list');
       if (histList) {
         histList.innerHTML = '';

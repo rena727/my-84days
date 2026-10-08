@@ -1,0 +1,1998 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sprint 84 · 27 Yaş Zəfər və İntizam Paneli</title>
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --primary-subtle: #f1f5f9;
+      --primary-border: #cbd5e1;
+      --accent: #8b5cf6;
+      
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+      
+      --bg-body: #f8fafc;
+      --bg-card: #ffffff;
+      --border-color: #e2e8f0;
+      --border-hover: #cbd5e1;
+      
+      --success: #10b981;
+      --success-subtle: #f0fdf4;
+      --success-border: #bbf7d0;
+      
+      --warning: #f59e0b;
+      --warning-subtle: #fffbeb;
+      --warning-border: #fef08a;
+
+      --danger: #ef4444;
+      --danger-subtle: #fef2f2;
+      --danger-border: #fecaca;
+      
+      --sidebar-width: 270px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    /* Layout */
+    #sidebar {
+      width: var(--sidebar-width);
+      background: #ffffff;
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      position: sticky;
+      top: 0;
+      flex-shrink: 0;
+      z-index: 50;
+      transition: all 0.2s ease;
+    }
+
+    #main-content {
+      flex: 1;
+      padding: 2rem 2.5rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: calc(100% - var(--sidebar-width));
+      overflow-y: auto;
+    }
+
+    /* Sidebar Components */
+    .sidebar-header {
+      padding: 1.5rem 1.25rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    .nav-list {
+      list-style: none;
+      padding: 1rem 0.75rem;
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.65rem 0.9rem;
+      border-radius: 0.6rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      border: 1px solid transparent;
+      user-select: none;
+    }
+
+    .nav-item:hover {
+      background: #f1f5f9;
+      color: var(--text-main);
+    }
+
+    .nav-item.active {
+      background: #f8fafc;
+      color: var(--primary);
+      border-color: var(--border-color);
+      font-weight: 700;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    }
+
+    .sidebar-footer {
+      padding: 1.25rem;
+      border-top: 1px solid var(--border-color);
+      background: #fcfcfd;
+    }
+
+    /* UI Cards */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 0.85rem;
+      padding: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+      transition: box-shadow 0.2s ease, border-color 0.2s ease;
+      margin-bottom: 1.5rem;
+    }
+
+    .card:hover {
+      border-color: var(--border-hover);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.55rem 1.1rem;
+      border-radius: 0.6rem;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      border: 1px solid transparent;
+      user-select: none;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+    }
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-secondary {
+      background: #f1f5f9;
+      color: var(--text-main);
+      border-color: #e2e8f0;
+    }
+    .btn-secondary:hover {
+      background: #e2e8f0;
+    }
+
+    .btn-danger {
+      background: var(--danger-subtle);
+      color: var(--danger);
+      border-color: var(--danger-border);
+    }
+    .btn-danger:hover {
+      background: #fee2e2;
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: #ffffff;
+    }
+    .btn-success:hover {
+      background: #059669;
+    }
+
+    .btn-sm {
+      padding: 0.35rem 0.65rem;
+      font-size: 0.78rem;
+      border-radius: 0.45rem;
+    }
+
+    /* Form Controls */
+    .input-field {
+      width: 100%;
+      padding: 0.6rem 0.85rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 0.6rem;
+      font-size: 0.88rem;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      background: #ffffff;
+      color: var(--text-main);
+    }
+    .input-field:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+    }
+
+    /* Grids */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+
+    @media (max-width: 1024px) {
+      .grid-3, .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      body { flex-direction: column; }
+      #sidebar { width: 100%; height: auto; position: relative; }
+      #main-content { width: 100%; padding: 1.25rem; }
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    }
+
+    /* Progress Bar */
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 0.5rem 0;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--primary);
+      border-radius: 999px;
+      transition: width 0.3s ease;
+    }
+
+    /* Calendar Grid */
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(65px, 1fr));
+      gap: 0.5rem;
+      max-height: 460px;
+      overflow-y: auto;
+      padding: 0.6rem;
+      background: #f8fafc;
+      border-radius: 0.75rem;
+      border: 1px solid var(--border-color);
+    }
+    .cal-day {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 0.5rem;
+      padding: 0.5rem 0.3rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+    .cal-day:hover {
+      border-color: var(--primary);
+      transform: translateY(-1px);
+    }
+    .cal-day.done {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary-hover);
+    }
+    .cal-day.today {
+      border: 2px solid var(--primary);
+      box-shadow: 0 0 6px rgba(99, 102, 241, 0.25);
+    }
+
+    /* Banner / Alerts */
+    .alert-box {
+      padding: 1.1rem 1.25rem;
+      border-radius: 0.75rem;
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      background: #f1f5f9;
+      color: var(--text-main);
+      border: 1px solid #e2e8f0;
+    }
+    .badge-primary {
+      background: #eef2ff;
+      color: var(--primary);
+      border-color: #c7d2fe;
+    }
+    .badge-success {
+      background: var(--success-subtle);
+      color: #059669;
+      border-color: var(--success-border);
+    }
+
+    /* Tab content visibility */
+    .tab-pane {
+      display: none;
+      animation: fadeIn 0.2s ease-in-out;
+    }
+    .tab-pane.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(3px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* List items */
+    .item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.8rem 1rem;
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 0.65rem;
+      margin-bottom: 0.5rem;
+      transition: border-color 0.15s ease;
+    }
+    .item-row:hover {
+      border-color: var(--border-hover);
+    }
+
+    .checkbox-round {
+      width: 1.3rem;
+      height: 1.3rem;
+      border-radius: 0.35rem;
+      border: 2px solid #cbd5e1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+      flex-shrink: 0;
+      background: #ffffff;
+      font-size: 0.8rem;
+    }
+    .checkbox-round.checked {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SOL MENYU (SIDEBAR) -->
+  <aside id="sidebar">
+    <div class="sidebar-header">
+      <div class="brand-title">
+        <span>⚡ SPRINT 84</span>
+      </div>
+      <div class="brand-sub">27 Yaş Zəfər & İntizam Sistemi</div>
+      <div style="margin-top: 0.75rem; display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.25rem 0.55rem; background: #f1f5f9; border-radius: 0.45rem; font-size: 0.75rem; font-weight: 700; color: var(--text-main); border: 1px solid var(--border-color);">
+        <span>🎯 84 Günlük Plan</span>
+        <span>•</span>
+        <span id="sidebar-days-left">84 gün</span>
+      </div>
+    </div>
+
+    <ul class="nav-list">
+      <li class="nav-item active" onclick="switchTab('dashboard')">
+        <span>📊</span> <span>İdarəetmə Paneli</span>
+      </li>
+      <li class="nav-item" onclick="switchTab('schedule')">
+        <span>⏰</span> <span>Saatbasaat Rejim</span>
+      </li>
+      <li class="nav-item" onclick="switchTab('calendar')">
+        <span>🗓️</span> <span>84 Günlük Təqvim</span>
+      </li>
+      <li class="nav-item" onclick="switchTab('health')">
+        <span>🩺</span> <span>Ferritin & Sağlamlıq</span>
+      </li>
+      <li class="nav-item" onclick="switchTab('stock')">
+        <span>🎨</span> <span>Stok Platformaları</span>
+      </li>
+      <li class="nav-item" onclick="switchTab('artlab')">
+        <span>🕯️</span> <span>Artlab Şam Satışları</span>
+      </li>
+      <li class="nav-item" onclick="switchTab('debt')">
+        <span>💰</span> <span>800 AZN & Borc 50%</span>
+      </li>
+      <li class="nav-item" onclick="switchTab('books')">
+        <span>📖</span> <span>Kitabxana & Oxu</span>
+      </li>
+      <li class="nav-item" onclick="switchTab('german')">
+        <span>🇩🇪</span> <span>Alman Dili Çeləncləri</span>
+      </li>
+      <li class="nav-item" onclick="switchTab('journal')">
+        <span>✍️</span> <span>Zəfər Jurnalı</span>
+      </li>
+    </ul>
+
+    <div class="sidebar-footer">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+        <span style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted);">Ümumi İntizam</span>
+        <span id="sidebar-discipline-val" style="font-size: 0.85rem; font-weight: 800; color: var(--primary);">0%</span>
+      </div>
+      <div class="progress-track">
+        <div id="sidebar-discipline-bar" class="progress-fill" style="width: 0%;"></div>
+      </div>
+      <button onclick="resetAllDataConfirm()" style="margin-top: 0.75rem; width: 100%; border: none; background: transparent; color: #94a3b8; font-size: 0.75rem; cursor: pointer; text-align: center; text-decoration: underline;">
+        Sistemi Sıfırla (Reset)
+      </button>
+    </div>
+  </aside>
+
+  <!-- ƏSAS MƏZMUN (MAIN CONTENT) -->
+  <main id="main-content">
+
+    <!-- 1. DASHBOARD -->
+    <div id="tab-dashboard" class="tab-pane active">
+      
+      <!-- GÜNÜN TƏSADÜFİ MOTİVASİYA KARTI -->
+      <div class="card" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-left: 4px solid var(--primary);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.4rem;">🔥</span>
+            <span style="font-weight: 800; font-size: 0.95rem; color: var(--text-main);">Günün Zəfər & İntizam Motivasiyası</span>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="renderRandomQuote()">🎲 Yeni Motivasiya</button>
+        </div>
+        <div id="dashboard-quote-text" style="font-size: 1.05rem; font-weight: 600; color: var(--text-main); line-height: 1.45; margin: 0.4rem 0;">
+          "281 gün keçdi, amma qalan 84 gün sənin 27 yaşının ən böyük dönüş nöqtəsi olacaq. Yorğunluq ferritinə görə idi, amma sən müalicə alırsan və hər gün güclənirsən!"
+        </div>
+        <div id="dashboard-quote-author" style="font-size: 0.8rem; color: var(--primary); font-weight: 700;">
+          — 84 Günlük Zəfər Qaydası
+        </div>
+      </div>
+
+      <!-- 3 ƏSAS HƏDƏF KARTI -->
+      <div class="grid-3">
+        <!-- Stok Kartı -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">🎨 Stok 1000 Set</span>
+            <span class="badge badge-primary" id="dash-stock-badge">561 / 1000</span>
+          </div>
+          <div style="font-size: 1.8rem; font-weight: 800; color: var(--text-main);" id="dash-stock-val">561</div>
+          <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">Qalan: <span id="dash-stock-remain" style="font-weight:700; color:var(--text-main);">439</span> set (~5.2 set/gün)</div>
+          <div class="progress-track">
+            <div class="progress-fill" id="dash-stock-bar" style="width: 56.1%;"></div>
+          </div>
+          <div style="display: flex; gap: 0.4rem; margin-top: 0.75rem;">
+            <button class="btn btn-secondary btn-sm" onclick="adjustStock(1)">+1 Set</button>
+            <button class="btn btn-secondary btn-sm" onclick="adjustStock(5)">+5 Set</button>
+            <button class="btn btn-primary btn-sm" onclick="switchTab('stock')">Platformalar ➔</button>
+          </div>
+        </div>
+
+        <!-- Artlab Şam Kartı -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">🕯️ Artlab Satışları</span>
+            <span class="badge badge-success" id="dash-candle-badge">Hədəf: 2 Satış</span>
+          </div>
+          <div style="font-size: 1.8rem; font-weight: 800; color: #10b981;" id="dash-candle-val">0 / 2</div>
+          <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">İl sonunadək ilk real gəlir və müştəri</div>
+          <div class="progress-track">
+            <div class="progress-fill" id="dash-candle-bar" style="width: 0%; background: #10b981;"></div>
+          </div>
+          <div style="display: flex; gap: 0.4rem; margin-top: 0.75rem;">
+            <button class="btn btn-secondary btn-sm" onclick="switchTab('artlab')">+ Satış Qeyd Et</button>
+          </div>
+        </div>
+
+        <!-- Borc 50% Kartı -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">💰 Borcun 50%-i</span>
+            <span class="badge badge-primary" id="dash-debt-badge">Hədəf: 600 AZN</span>
+          </div>
+          <div style="font-size: 1.8rem; font-weight: 800; color: var(--text-main);" id="dash-debt-val">0 AZN</div>
+          <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">Ümumi hədəf 600 AZN ödəmək (Maaş: 800 AZN)</div>
+          <div class="progress-track">
+            <div class="progress-fill" id="dash-debt-bar" style="width: 0%;"></div>
+          </div>
+          <div style="display: flex; gap: 0.4rem; margin-top: 0.75rem;">
+            <button class="btn btn-secondary btn-sm" onclick="switchTab('debt')">+ Borc Ödənişi Yaz</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- GÜNLÜK TEZ QEYDİYYAT (QUICK LOG) -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">⚡ Günün Sürətli İzləmə Paneli</span>
+          <span style="font-size: 0.8rem; color: var(--text-muted);">Tək toxunuşla qeyd et</span>
+        </div>
+        <div class="grid-4">
+          <!-- Su -->
+          <div style="background: #f8fafc; border: 1px solid var(--border-color); padding: 1rem; border-radius: 0.65rem; text-align: center;">
+            <div style="font-size: 1.3rem; margin-bottom: 0.2rem;">💧</div>
+            <div style="font-size: 0.78rem; color: var(--text-muted);">İçilən Su</div>
+            <div style="font-size: 1.2rem; font-weight: 800; color: var(--text-main); margin: 0.2rem 0;" id="quick-water-val">0.5 / 2.0 L</div>
+            <div style="display: flex; justify-content: center; gap: 0.35rem;">
+              <button class="btn btn-secondary btn-sm" onclick="adjustWater(-0.25)">-0.25</button>
+              <button class="btn btn-primary btn-sm" onclick="adjustWater(0.25)">+0.25</button>
+            </div>
+          </div>
+
+          <!-- Addım -->
+          <div style="background: #f8fafc; border: 1px solid var(--border-color); padding: 1rem; border-radius: 0.65rem; text-align: center;">
+            <div style="font-size: 1.3rem; margin-bottom: 0.2rem;">👟</div>
+            <div style="font-size: 0.78rem; color: var(--text-muted);">Günün Addımı</div>
+            <div style="font-size: 1.2rem; font-weight: 800; color: var(--text-main); margin: 0.2rem 0;" id="quick-steps-val">6,000</div>
+            <div style="display: flex; justify-content: center; gap: 0.35rem;">
+              <button class="btn btn-secondary btn-sm" onclick="adjustSteps(-1000)">-1k</button>
+              <button class="btn btn-primary btn-sm" onclick="adjustSteps(1000)">+1k</button>
+            </div>
+          </div>
+
+          <!-- Kitab Səhifəsi -->
+          <div style="background: #f8fafc; border: 1px solid var(--border-color); padding: 1rem; border-radius: 0.65rem; text-align: center;">
+            <div style="font-size: 1.3rem; margin-bottom: 0.2rem;">📖</div>
+            <div style="font-size: 0.78rem; color: var(--text-muted);">Oxu İrəliləyişi</div>
+            <div style="font-size: 1.2rem; font-weight: 800; color: var(--text-main); margin: 0.2rem 0;" id="quick-pages-val">0 səh</div>
+            <div style="display: flex; justify-content: center; gap: 0.35rem;">
+              <button class="btn btn-secondary btn-sm" onclick="switchTab('books')">Kitabxana ➔</button>
+            </div>
+          </div>
+
+          <!-- Ferritin Dərman -->
+          <div style="background: #f8fafc; border: 1px solid var(--border-color); padding: 1rem; border-radius: 0.65rem; text-align: center;">
+            <div style="font-size: 1.3rem; margin-bottom: 0.2rem;">💊</div>
+            <div style="font-size: 0.78rem; color: var(--text-muted);">Dəmir & Vitamin</div>
+            <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); margin: 0.35rem 0;" id="quick-meds-status">İçilməyib ❌</div>
+            <button class="btn btn-secondary btn-sm" id="quick-meds-btn" onclick="toggleMedsToday()" style="width: 100%;">Qəbul etdim</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. SAATBASAAT REJİM (TAM EDIT & ADD & DELETE İMKANI İLƏ) -->
+    <div id="tab-schedule" class="tab-pane">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <span class="card-title">⏰ Fərdi Saatbasaat Rejim</span>
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">Öz saatlarını və tapşırıqlarını sərbəst şəkildə əlavə et, redaktə et və ya sil!</div>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="resetTodayTasks()">Bugünkü Seçimləri Sıfırla</button>
+        </div>
+
+        <!-- Yeni Saat/Tapşırıq Əlavə Et -->
+        <div style="background: #f8fafc; border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.65rem; margin-bottom: 1.25rem;">
+          <div style="font-weight: 700; font-size: 0.9rem; color: var(--text-main); margin-bottom: 0.5rem;" id="schedule-form-title">➕ Yeni Saat & Rejim Əlavə Et:</div>
+          <input type="hidden" id="edit-schedule-id" value="">
+          <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+            <input type="text" id="sched-time-input" placeholder="Saat aralığı (məs: 08:00 - 09:00)" class="input-field" style="flex: 1; min-width: 160px;">
+            <input type="text" id="sched-title-input" placeholder="Başlıq (məs: Səhər Dəmir & Su)" class="input-field" style="flex: 2; min-width: 200px;">
+            <input type="text" id="sched-desc-input" placeholder="Açıqlama / Qaydalar (məs: Acqarına dəmir, kofe yoxdur)" class="input-field" style="flex: 3; min-width: 250px;">
+            <button class="btn btn-primary" id="sched-submit-btn" onclick="saveScheduleItem()">+ Əlavə Et</button>
+            <button class="btn btn-secondary" id="sched-cancel-btn" style="display:none;" onclick="cancelEditSchedule()">Ləğv Et</button>
+          </div>
+        </div>
+
+        <div id="schedule-list">
+          <!-- Dinamik doldurulacaq -->
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. 84 GÜNLÜK TƏQVİM -->
+    <div id="tab-calendar" class="tab-pane">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <span class="card-title">🗓️ 84 Günlük Zəfər Təqvimi (8 Oktyabr - 31 Dekabr 2026)</span>
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">Hər günə klikləyərək tamamlandığını qeyd et. Zənciri qırma!</div>
+          </div>
+          <div class="badge badge-primary" id="cal-completed-count">0 / 84 gün tamamlandı</div>
+        </div>
+
+        <div class="calendar-grid" id="calendar-grid-container">
+          <!-- 84 Gün dinamik bura yerləşəcək -->
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. FERRİTİN & SAĞLAMLIQ -->
+    <div id="tab-health" class="tab-pane">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">🩺 Ferritin Bərpa Protokolu (10 ➔ 50 ng/mL)</span>
+          <span class="badge" style="background: var(--warning-subtle); color: #b45309; border-color: var(--warning-border);">Hazırkı Ferritin: 10 (Kritik)</span>
+        </div>
+
+        <div class="alert-box" style="background: #fffbeb; border-color: #fef08a;">
+          <div style="font-size: 1.5rem;">☕⚠️</div>
+          <div>
+            <div style="font-weight: 700; color: #92400e;">QƏHVƏ VƏ ÇAY PROTOKOLU (Çox Vacib!)</div>
+            <div style="font-size: 0.83rem; color: #78350f;">
+              Dəmir preparatını (Hemo) qəbul etdikdən <b>2 saat əvvəl və 2 saat sonra</b> çay və kofe QƏTİYYƏN İÇMƏ! Əks halda dəmirin sorulması 80% bloklanır və halsızlıq keçmir.
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <!-- Qəbul Planı -->
+          <div style="background: #f8fafc; border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.65rem;">
+            <div style="font-weight: 700; color: var(--text-main); margin-bottom: 0.75rem;">💊 Gündəlik Bioloji Takviyələr:</div>
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.88rem;">
+              <li>✅ <b>Dəmir (Hemo):</b> Səhər acqarına 500ml ilıq su + C vitamini/Limonla</li>
+              <li>✅ <b>Balqabaq Tumu:</b> Günorta və ya axşamüstü 1 ovuc (təbii dəmir və sink)</li>
+              <li>✅ <b>Kollagen:</b> Günorta yeməyindən sonra (dəri bərpası üçün)</li>
+              <li>✅ <b>Vitamin D3:</b> Naharda yağlı qida ilə birlikdə</li>
+              <li>✅ <b>Magnezium:</b> Gecə saat 22:15-də yuxudan əvvəl (əzələ və dərin yuxu)</li>
+            </ul>
+          </div>
+
+          <!-- Qan Analizləri Tarixçəsi -->
+          <div style="background: #f8fafc; border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.65rem;">
+            <div style="font-weight: 700; color: var(--text-main); margin-bottom: 0.75rem;">🩸 Qan Analizi Nəticələri Tarixçəsi</div>
+            <div style="display: flex; gap: 0.4rem; margin-bottom: 0.75rem;">
+              <input type="date" id="health-date-input" class="input-field" style="flex: 1;">
+              <input type="number" id="health-val-input" placeholder="Ferritin (məs: 18)" class="input-field" style="flex: 1;">
+              <button class="btn btn-primary btn-sm" onclick="addBloodTest()">Əlavə et</button>
+            </div>
+            <div id="blood-test-list" style="max-height: 180px; overflow-y: auto;">
+              <!-- Analizlər -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. STOK PLATFORMALARI -->
+    <div id="tab-stock" class="tab-pane">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <span class="card-title">🎨 Stok Platformaları & İstehsal Fabriki (Hədəf: 1000 Set)</span>
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">Bütün stok saytlarını idarə et, yenilərini əlavə et və ya sil</div>
+          </div>
+          <span class="badge badge-primary" id="stock-page-badge">Ümumi: 561 / 1000</span>
+        </div>
+
+        <!-- Platforma Kartları Qridi -->
+        <div style="font-weight: 700; font-size: 0.9rem; color: var(--text-main); margin-bottom: 0.5rem;">🌐 Aktiv Stok Saytları:</div>
+        <div class="grid-3" id="stock-platforms-grid" style="margin-bottom: 1.25rem;"></div>
+
+        <!-- Yeni Platforma Əlavə Et -->
+        <div style="background: #f8fafc; border: 1px solid var(--border-color); padding: 1rem; border-radius: 0.65rem; margin-bottom: 1.25rem;">
+          <div style="font-weight: 700; font-size: 0.88rem; color: var(--text-main); margin-bottom: 0.5rem;">➕ Yeni Stok Saytı Əlavə Et:</div>
+          <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+            <input type="text" id="new-platform-name" placeholder="Saytın adı (məs: Freepik, Envato...)" class="input-field" style="flex: 2; min-width: 180px;">
+            <input type="number" id="new-platform-current" placeholder="Mövcud Set Sayı (məs: 0)" class="input-field" style="flex: 1; min-width: 110px;">
+            <input type="number" id="new-platform-target" placeholder="Hədəf Set Sayı (məs: 200)" class="input-field" style="flex: 1; min-width: 110px;">
+            <button class="btn btn-primary" onclick="addNewPlatform()">+ Sayt Əlavə Et</button>
+          </div>
+        </div>
+
+        <!-- Set Yükləmə Qeydiyyatı -->
+        <div style="background: #ffffff; border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.65rem;">
+          <div style="font-weight: 700; font-size: 0.9rem; color: var(--text-main); margin-bottom: 0.5rem;">📦 Yeni Set Yükləməsini Qeyd Et:</div>
+          <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+            <input type="text" id="stock-batch-title" placeholder="Setin adı / Mövzu (məs: Qış naxışları)" class="input-field" style="flex: 2; min-width: 180px;">
+            <input type="number" id="stock-batch-qty" placeholder="Say (məs: 5)" value="5" class="input-field" style="flex: 1; min-width: 90px;">
+            <select id="stock-batch-platform" class="input-field" style="flex: 1; min-width: 140px;"></select>
+            <button class="btn btn-primary" onclick="addStockBatch()">+ Qeyd Et</button>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.25rem;">
+          <div style="font-weight: 700; color: var(--text-main); margin-bottom: 0.75rem;">📋 Yükləmə Tarixçəsi:</div>
+          <div id="stock-history-list" style="max-height: 250px; overflow-y: auto;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. ARTLAB ŞAM SATIŞLARI -->
+    <div id="tab-artlab" class="tab-pane">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">🕯️ Artlab Qoxulu Şam Satış Funneli</span>
+          <span class="badge badge-success">Instagram: @artlab_candles (8 Takipçi)</span>
+        </div>
+
+        <div class="alert-box" style="background: #f0fdf4; border-color: #bbf7d0;">
+          <div style="font-size: 1.5rem;">🎁</div>
+          <div>
+            <div style="font-weight: 700; color: #166534;">Q4 / Yeni İl Fürsəti (İl bitmədən 1-2 real satış)</div>
+            <div style="font-size: 0.83rem; color: #15803d;">
+              Şamlar hazırdır! İndi əsas məsələ hər həftə 2-3 estetik Reels çəkmək və Yeni İl hədiyyə paketləri yaratmaqdır.
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <!-- Yeni Satış Əlavə Et -->
+          <div style="background: #f8fafc; border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.65rem;">
+            <div style="font-weight: 700; color: var(--text-main); margin-bottom: 0.75rem;">🛍️ Yeni Satışı Qeyd Et:</div>
+            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+              <input type="text" id="candle-customer" placeholder="Müştəri adı və ya Instagram hesabı" class="input-field">
+              <input type="text" id="candle-scent" placeholder="Şamın qoxusu / modeli (məs: Vanil & Darçın)" class="input-field">
+              <div style="display: flex; gap: 0.4rem;">
+                <input type="number" id="candle-price" placeholder="Məbləğ (AZN)" class="input-field">
+                <input type="date" id="candle-date" class="input-field">
+              </div>
+              <button class="btn btn-primary" onclick="addCandleSale()">+ Satışı Təsdiqlə</button>
+            </div>
+          </div>
+
+          <!-- Satışlar Siyahısı -->
+          <div style="background: #f8fafc; border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.65rem;">
+            <div style="font-weight: 700; color: var(--text-main); margin-bottom: 0.75rem;">🌟 Real Satışlar Tarixçəsi:</div>
+            <div id="candle-sales-list" style="max-height: 220px; overflow-y: auto;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. 800 AZN MAAŞ & 50% BORC -->
+    <div id="tab-debt" class="tab-pane">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">💰 800 AZN Maaş və 50% Borc İdarəetməsi</span>
+          <span class="badge badge-primary" id="debt-header-badge">0 / 600 AZN Ödənilib</span>
+        </div>
+
+        <div class="grid-3" style="margin-bottom: 1.25rem;">
+          <div style="background: #f8fafc; border: 1px solid var(--border-color); padding: 1rem; border-radius: 0.65rem;">
+            <div style="font-size: 0.78rem; color: var(--text-muted);">Aylıq Maaş</div>
+            <div style="font-size: 1.5rem; font-weight: 800; color: var(--text-main);">800 AZN</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">3 Aylıq Toplam: 2,400 AZN</div>
+          </div>
+          <div style="background: #f8fafc; border: 1px solid var(--border-color); padding: 1rem; border-radius: 0.65rem;">
+            <div style="font-size: 0.78rem; color: var(--text-muted);">Hədəflənən Borc Ödənişi</div>
+            <div style="font-size: 1.5rem; font-weight: 800; color: var(--text-main);" id="debt-target-display">600 AZN</div>
+            <div style="font-size: 0.75rem; color: #10b981;">Ümumi borcun 50%-i</div>
+          </div>
+          <div style="background: #f8fafc; border: 1px solid var(--border-color); padding: 1rem; border-radius: 0.65rem;">
+            <div style="font-size: 0.78rem; color: var(--text-muted);">Faktiki Ödənilən</div>
+            <div style="font-size: 1.5rem; font-weight: 800; color: #10b981;" id="debt-paid-display">0 AZN</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">Qalan: <span id="debt-remain-display">600</span> AZN</div>
+          </div>
+        </div>
+
+        <!-- Ödəniş Forması -->
+        <div style="background: #ffffff; border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.65rem; margin-bottom: 1.25rem;">
+          <div style="font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">💸 Yeni Borc Ödənişini Qeyd Et:</div>
+          <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+            <input type="text" id="debt-note" placeholder="Qeyd (məs: Bank kartı / Oktyabr maaşından)" class="input-field" style="flex: 2; min-width: 180px;">
+            <input type="number" id="debt-amount" placeholder="Məbləğ (AZN)" class="input-field" style="flex: 1; min-width: 110px;">
+            <input type="date" id="debt-date" class="input-field" style="flex: 1; min-width: 130px;">
+            <button class="btn btn-primary" onclick="addDebtPayment()">+ Ödənişi Yaz</button>
+          </div>
+        </div>
+
+        <!-- Ödənişlər Siyahısı -->
+        <div style="font-weight: 700; color: var(--text-main); margin-bottom: 0.75rem;">📜 Borc Ödənişləri Tarixçəsi:</div>
+        <div id="debt-history-list" style="max-height: 220px; overflow-y: auto;"></div>
+      </div>
+    </div>
+
+    <!-- 8. KİTABXANA & OXU İZLƏYİCİSİ -->
+    <div id="tab-books" class="tab-pane">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <span class="card-title">📖 Kitabxana & Oxu İzləyicisi (İl sonunadək 2 Kitab)</span>
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">Oxuyacağın kitabları əlavə et, gündəlik səhifələri yaz, qalan səhifələr azalsın!</div>
+          </div>
+          <span class="badge badge-primary" id="books-completed-badge">0 / 2 Kitab bitirildi</span>
+        </div>
+
+        <!-- Yeni Kitab Əlavə Et -->
+        <div style="background: #f8fafc; border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.65rem; margin-bottom: 1.25rem;">
+          <div style="font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">📚 Yeni Kitab Əlavə Et:</div>
+          <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+            <input type="text" id="book-title-input" placeholder="Kitabın adı və müəllifi" class="input-field" style="flex: 2; min-width: 200px;">
+            <input type="number" id="book-total-pages-input" placeholder="Ümumi Səhifə (məs: 280)" class="input-field" style="flex: 1; min-width: 120px;">
+            <input type="number" id="book-current-pages-input" placeholder="Hazırda oxunmuş (məs: 0)" value="0" class="input-field" style="flex: 1; min-width: 120px;">
+            <button class="btn btn-primary" onclick="addNewBook()">+ Kitabı Əlavə Et</button>
+          </div>
+        </div>
+
+        <!-- Kitablar Siyahısı -->
+        <div style="font-weight: 700; color: var(--text-main); margin-bottom: 0.75rem;">📚 Oxunan və Oxunacaq Kitablarım:</div>
+        <div id="books-list-container" style="display: flex; flex-direction: column; gap: 1rem;"></div>
+      </div>
+    </div>
+
+    <!-- 9. ALMAN DİLİ ÇELƏNCLƏRİ (ONLY CHALLENGES, XP & LEVEL) -->
+    <div id="tab-german" class="tab-pane">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <span class="card-title">🇩🇪 Alman Dili A1 & Gündəlik Çelənclər</span>
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">Hər gün təsadüfi çeləncləri tamamla, səviyyəni qaldır və qələbələrini topla!</div>
+          </div>
+          <div style="display: flex; gap: 0.4rem;">
+            <span class="badge badge-success" id="german-level-badge">Səviyyə: A1 Başlanğıc</span>
+            <span class="badge badge-primary" id="german-xp-badge">XP: 0</span>
+          </div>
+        </div>
+
+        <!-- GÜNÜN TƏSADÜFİ ÇELƏNC KARTI -->
+        <div style="background: #f8fafc; border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.75rem; margin-bottom: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <span style="font-size: 1.5rem;">🎯</span>
+              <div>
+                <span style="font-weight: 800; font-size: 1rem; color: var(--text-main);" id="current-challenge-title">Günün Alman Dili Çelənci</span>
+                <div style="font-size: 0.78rem; color: var(--text-muted);">Hər tamamlanan çelənc = +30 XP</div>
+              </div>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="generateNewRandomChallenge()">🎲 Başqa Çelənc Seç</button>
+          </div>
+
+          <div style="font-size: 1.05rem; color: var(--text-main); font-weight: 700; padding: 1rem; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 0.6rem; margin-bottom: 1rem;" id="current-challenge-desc">
+            5 yeni gündəlik söz öyrən və səsləndir!
+          </div>
+
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn btn-success" id="complete-challenge-btn" onclick="completeCurrentChallenge()">✅ Çelənci Tamamladım (+30 XP Qazan)</button>
+          </div>
+        </div>
+
+        <!-- ÖZ ÇELƏNCİNİ ƏLAVƏ ET -->
+        <div style="background: #ffffff; border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.65rem; margin-bottom: 1.5rem;">
+          <div style="font-weight: 700; font-size: 0.9rem; color: var(--text-main); margin-bottom: 0.5rem;">➕ Fərdi Alman Dili Çelənci Əlavə Et:</div>
+          <div style="display: flex; gap: 0.4rem;">
+            <input type="text" id="custom-challenge-input" placeholder="Məsələn: Bu gün 10 dəqiqə Duolingo et / 1 hekayə oxu..." class="input-field" style="flex: 1;">
+            <button class="btn btn-primary" onclick="addCustomChallenge()">+ Əlavə Et</button>
+          </div>
+        </div>
+
+        <!-- TAMAMLANMIŞ ÇELƏNCLƏRİN MARAQLI VƏ DETALLI SİYAHISI -->
+        <div style="background: #ffffff; border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.75rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+            <span style="font-weight: 800; font-size: 0.95rem; color: var(--text-main);">🏆 Zəfər Siyahısı: Tamamladığım Çelənclər</span>
+            <span class="badge badge-success" id="challenges-total-count">0 Çelənc</span>
+          </div>
+          <div id="completed-challenges-list" style="max-height: 280px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 10. ŞƏXSİ ZƏFƏR JURNALI -->
+    <div id="tab-journal" class="tab-pane">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">✍️ Şəxsi Zəfər və İntizam Jurnalı</span>
+          <span class="badge badge-primary">Hər Günün Hesabatı</span>
+        </div>
+
+        <div style="background: #f8fafc; border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.65rem; margin-bottom: 1.25rem;">
+          <div style="font-weight: 700; color: var(--text-main); margin-bottom: 0.75rem;">✍️ Bugünkü Zəfər Qeydini Yaz:</div>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <input type="date" id="journal-date" class="input-field">
+            <textarea id="journal-wins" placeholder="🌟 Bugünkü 3 əsas qələbəm (Nələri etdim? Məs: 5 set yüklədim, dəmiri vaxtında içdim...)" class="input-field" style="min-height: 65px;"></textarea>
+            <textarea id="journal-lessons" placeholder="💡 Bu gün nə öyrəndim və ya nəyi yaxşılaşdıra bilərəm?" class="input-field" style="min-height: 55px;"></textarea>
+            <textarea id="journal-priority" placeholder="🎯 Sabahın ən vacib 1 nömrəli prioriteti nədir?" class="input-field" style="min-height: 55px;"></textarea>
+            <button class="btn btn-primary" onclick="saveJournalEntry()">💾 Jurnala Saxla</button>
+          </div>
+        </div>
+
+        <div style="font-weight: 700; color: var(--text-main); margin-bottom: 0.75rem;">📜 Keçmiş Günlərin Qeydləri:</div>
+        <div id="journal-history-list" style="max-height: 350px; overflow-y: auto;"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    /* ==========================================
+       MOTIVATION QUOTES POOL
+       ========================================== */
+    const quotesPool = [
+      { text: "281 gün keçdi, amma qalan 84 gün sənin 27 yaşının ən böyük dönüş nöqtəsi olacaq. Sən bu ili zəfərlə bağlayacaqsan!", author: "84 Günlük Zəfər Manifesti" },
+      { text: "Yorğunluğun səbəbi tənbəllik yox, ferritin 10 idi. İndi dəmiri qəbul edirsən, enerjin geri qayıdır və səni heç nə saxlaya bilməz!", author: "Bioloji Güc & İntizam" },
+      { text: "561 set artıq bazandadır. Gündə cəmi 5.2 set yükləməklə 1000 setlik passiv gəlir fabriki qurursan!", author: "Stok İstehsal Fabriki" },
+      { text: "Artlab şamları hazırdır. Yeni il yaxınlaşır, 1-2 real satış sənin ilk böyük qığılcımın olacaq!", author: "Artlab Brending" },
+      { text: "Kiçik gündəlik addımlar böyük nəticələr yaradır. 15 dəqiqə Alman dili, 10 səhifə kitab, 8 stəkan su = Tam Yeni Bir İnsan!", author: "Atom İntizamı" },
+      { text: "800 AZN maaşla borcların 50%-ni bağlamaq qərarı sənin maliyyə azadlığının ilk addımıdır. İntizamını qoru!", author: "Maliyyə Zəfəri" },
+      { text: "Bu gün atdığın hər bir addım, içdiyin hər qurtum su və yüklədiyin hər bir vektor gələcək həyatına yatırımdır!", author: "Gündəlik Qələbə" }
+    ];
+
+    /* ==========================================
+       DATA STRUCTURE & LOCALSTORAGE ENGINE
+       ========================================== */
+    const STORAGE_KEY = 'SPRINT_84_VANILLA_STORE_V3';
+
+    const defaultSchedule = [
+      { id: 't1', time: '07:30 - 08:30', title: 'Oyanış & Dəmir Protokolu', desc: '500ml ilıq su, Balqabaq tumu, Dəmir (Hemo) qəbul et. Kofe/Çay QƏTİYYƏN İÇMƏ!', checked: false },
+      { id: 't2', time: '09:00 - 13:00', title: 'Əsas İş & Enerji İdarəetməsi', desc: 'Fokuslanmış iş, bol su içmək, ferritin yorğunluğuna təslim olmamaq.', checked: false },
+      { id: 't3', time: '13:00 - 14:00', title: 'Nahar & Kollagen / D3', desc: 'Sağlam qidalanma, Kollagen və Vitamin D qəbulu.', checked: false },
+      { id: 't4', time: '14:00 - 18:00', title: 'İşin İkinci Hissəsi & Addımlar', desc: 'İş masasında hərəkətli olmaq, 6,000+ addıma doğru irəliləmək.', checked: false },
+      { id: 't5', time: '18:30 - 19:30', title: 'Axşam Gəzintisi (6k - 12k Addım)', desc: 'Təmiz hava, bədənin oksigenlə təminatı və zehni boşaltma.', checked: false },
+      { id: 't6', time: '19:30 - 21:00', title: '🎨 Stok 1000 Set Fabriki', desc: 'Gündəlik 5.2 yeni vektor/set hazırlığı və stok saytlarına yükləmə.', checked: false },
+      { id: 't7', time: '21:00 - 21:30', title: '🕯️ Artlab Şam (Instagram / Paketləmə)', desc: '1 estetik Reels paylaşımı, qoxulu şamların yeni il hazırlığı.', checked: false },
+      { id: 't8', time: '21:30 - 22:00', title: '🇩🇪 Alman Dili Çelənci & Kitab', desc: 'Günün çeləncini tamamla (+30 XP) və 10 səhifə kitab oxu.', checked: false },
+      { id: 't9', time: '22:15 - 23:00', title: 'Magnezium, Zəfər Jurnalı & Yuxu', desc: 'Magnezium iç, günün zəfərlərini qeyd et və 23:00-da dərin yuxuya get.', checked: false }
+    ];
+
+    let challengePool = [
+      "Günün 5 yeni sözünü öyrən və səsləndir (+30 XP)",
+      "15 dəqiqə fasiləsiz Alman dilində podcast / video dinlə (+30 XP)",
+      "Özünü və sevdiyin məşğuliyyətləri 3 cümlə ilə Almanca təqdim et (+30 XP)",
+      "1-dən 50-yə qədər sayları və həftənin günlərini təkrarla (+30 XP)",
+      "Almanca 1 qısa hekayə və ya sadə dialoq oxu (+30 XP)",
+      "Evdə gördüyün 5 əşyanın artikli ilə birgə adını tap (der/die/das) (+30 XP)",
+      "Bugünkü qidaların adlarını (su, çörək, qəhvə, meyvə) Almanca yaz (+30 XP)",
+      "Günün 3 felini tap və indiki zamanda şəxslərə görə hallandır (+30 XP)"
+    ];
+
+    let store = {
+      stockPlatforms: [
+        { id: 'sp1', name: 'Shutterstock', current: 561, target: 1000 },
+        { id: 'sp2', name: 'Adobe Stock', current: 0, target: 200 },
+        { id: 'sp3', name: 'Vecteezy', current: 0, target: 200 }
+      ],
+      stockHistory: [],
+      candleTarget: 2,
+      candleSales: [],
+      debtTarget: 600,
+      debtPaid: 0,
+      debtHistory: [],
+      todayWater: 0.5,
+      todaySteps: 6000,
+      medsTaken: false,
+      books: [
+        { id: 'bk1', title: 'Atom Vərdişləri (James Clear)', totalPages: 320, readPages: 45 },
+        { id: 'bk2', title: 'Dərin İş (Deep Work - Cal Newport)', totalPages: 280, readPages: 0 }
+      ],
+      germanXP: 0,
+      currentChallengeIdx: 0,
+      completedChallenges: [],
+      schedule: defaultSchedule,
+      calendarDays: {},
+      bloodTests: [{ id: 'b1', date: '2026-10-08', value: 10 }],
+      journalEntries: []
+    };
+
+    function loadStore() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          store = { ...store, ...parsed };
+        }
+      } catch (e) {
+        console.error('Failed to load store', e);
+      }
+    }
+
+    function saveStore() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+        renderAll();
+      } catch (e) {
+        console.error('Failed to save store', e);
+      }
+    }
+
+    /* ==========================================
+       TAB SWITCHING
+       ========================================== */
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+
+      const targetPane = document.getElementById('tab-' + tabId);
+      if (targetPane) targetPane.classList.add('active');
+
+      const navMap = {
+        'dashboard': 0,
+        'schedule': 1,
+        'calendar': 2,
+        'health': 3,
+        'stock': 4,
+        'artlab': 5,
+        'debt': 6,
+        'books': 7,
+        'german': 8,
+        'journal': 9
+      };
+      const navItems = document.querySelectorAll('.nav-item');
+      if (navMap[tabId] !== undefined && navItems[navMap[tabId]]) {
+        navItems[navMap[tabId]].classList.add('active');
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* ==========================================
+       MOTIVATION QUOTES
+       ========================================== */
+    function renderRandomQuote() {
+      const q = quotesPool[Math.floor(Math.random() * quotesPool.length)];
+      const qText = document.getElementById('dashboard-quote-text');
+      const qAuth = document.getElementById('dashboard-quote-author');
+      if (qText) qText.innerText = `"${q.text}"`;
+      if (qAuth) qAuth.innerText = `— ${q.author}`;
+    }
+
+    /* ==========================================
+       RENDER FUNCTIONS
+       ========================================== */
+    function renderAll() {
+      renderDashboard();
+      renderSchedule();
+      renderCalendar();
+      renderHealth();
+      renderStock();
+      renderCandles();
+      renderDebt();
+      renderBooks();
+      renderGerman();
+      renderJournal();
+      renderDiscipline();
+    }
+
+    function getShutterstockPlatform() {
+      return store.stockPlatforms.find(p => p.name.toLowerCase().includes('shutter')) || store.stockPlatforms[0] || { current: 561, target: 1000 };
+    }
+
+    function renderDiscipline() {
+      const completedTasks = store.schedule.filter(t => t.checked).length;
+      const taskRatio = store.schedule.length > 0 ? (completedTasks / store.schedule.length) * 40 : 0;
+
+      const completedDays = Object.keys(store.calendarDays).length;
+      const dayRatio = Math.min((completedDays / 84) * 30, 30);
+
+      const shutter = getShutterstockPlatform();
+      const stockProgress = Math.min(((shutter.current - 561) / (1000 - 561)) * 30, 30);
+
+      const totalDiscipline = Math.min(Math.round(taskRatio + dayRatio + Math.max(stockProgress, 0)), 100);
+
+      const elVal = document.getElementById('sidebar-discipline-val');
+      const elBar = document.getElementById('sidebar-discipline-bar');
+      if (elVal) elVal.innerText = totalDiscipline + '%';
+      if (elBar) elBar.style.width = totalDiscipline + '%';
+    }
+
+    function renderDashboard() {
+      const shutter = getShutterstockPlatform();
+      const stockVal = document.getElementById('dash-stock-val');
+      const stockRemain = document.getElementById('dash-stock-remain');
+      const stockBar = document.getElementById('dash-stock-bar');
+      const stockBadge = document.getElementById('dash-stock-badge');
+      if (stockVal) stockVal.innerText = shutter.current;
+      if (stockRemain) stockRemain.innerText = Math.max(shutter.target - shutter.current, 0);
+      if (stockBadge) stockBadge.innerText = shutter.current + ' / ' + shutter.target;
+      if (stockBar) {
+        const pct = Math.min((shutter.current / shutter.target) * 100, 100);
+        stockBar.style.width = pct + '%';
+      }
+
+      // Candles
+      const candleVal = document.getElementById('dash-candle-val');
+      const candleBar = document.getElementById('dash-candle-bar');
+      const candleCount = store.candleSales.length;
+      if (candleVal) candleVal.innerText = candleCount + ' / 2';
+      if (candleBar) {
+        const pct = Math.min((candleCount / 2) * 100, 100);
+        candleBar.style.width = pct + '%';
+      }
+
+      // Debt
+      const debtVal = document.getElementById('dash-debt-val');
+      const debtBar = document.getElementById('dash-debt-bar');
+      if (debtVal) debtVal.innerText = store.debtPaid + ' AZN';
+      if (debtBar) {
+        const pct = Math.min((store.debtPaid / store.debtTarget) * 100, 100);
+        debtBar.style.width = pct + '%';
+      }
+
+      // Quick logs
+      const qWater = document.getElementById('quick-water-val');
+      const qSteps = document.getElementById('quick-steps-val');
+      const qPages = document.getElementById('quick-pages-val');
+      const qMeds = document.getElementById('quick-meds-status');
+      const qMedsBtn = document.getElementById('quick-meds-btn');
+
+      const totalReadPages = store.books.reduce((sum, b) => sum + b.readPages, 0);
+      if (qWater) qWater.innerText = store.todayWater.toFixed(2) + ' / 2.0 L';
+      if (qSteps) qSteps.innerText = store.todaySteps.toLocaleString();
+      if (qPages) qPages.innerText = totalReadPages + ' səh';
+      if (qMeds) qMeds.innerText = store.medsTaken ? 'Qəbul edildi ✅' : 'İçilməyib ❌';
+      if (qMedsBtn) qMedsBtn.innerText = store.medsTaken ? 'Ləğv et' : 'Qəbul etdim';
+    }
+
+    /* ==========================================
+       SCHEDULE (CUSTOMIZABLE, EDITABLE & DELETABLE)
+       ========================================== */
+    function renderSchedule() {
+      const container = document.getElementById('schedule-list');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (store.schedule.length === 0) {
+        container.innerHTML = '<div style="font-size: 0.9rem; color: var(--text-light); padding: 1rem; text-align:center;">Hələ heç bir saat rejimi yoxdur. Yuxarıdakı formdan öz gününə uyğun saatlar əlavə et! ⏰</div>';
+        return;
+      }
+
+      store.schedule.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'item-row';
+        row.innerHTML = `
+          <div style="display: flex; align-items: center; gap: 0.85rem; flex: 1;">
+            <div class="checkbox-round ${item.checked ? 'checked' : ''}" onclick="toggleScheduleItem('${item.id}')">
+              ${item.checked ? '✓' : ''}
+            </div>
+            <div>
+              <div style="font-weight: 700; font-size: 0.92rem; color: ${item.checked ? 'var(--primary)' : 'var(--text-main)'}; text-decoration: ${item.checked ? 'line-through' : 'none'};">
+                <span style="color:var(--primary); font-weight:800;">${item.time}</span> · ${item.title}
+              </div>
+              <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.15rem;">
+                ${item.desc}
+              </div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.4rem;">
+            <button class="btn btn-secondary btn-sm" onclick="startEditSchedule('${item.id}')">Düzəlt</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteScheduleItem('${item.id}')">Sil</button>
+          </div>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function toggleScheduleItem(id) {
+      store.schedule = store.schedule.map(item => item.id === id ? { ...item, checked: !item.checked } : item);
+      saveStore();
+    }
+
+    function resetTodayTasks() {
+      store.schedule = store.schedule.map(item => ({ ...item, checked: false }));
+      saveStore();
+    }
+
+    function saveScheduleItem() {
+      const editIdEl = document.getElementById('edit-schedule-id');
+      const timeEl = document.getElementById('sched-time-input');
+      const titleEl = document.getElementById('sched-title-input');
+      const descEl = document.getElementById('sched-desc-input');
+
+      if (!timeEl.value.trim() || !titleEl.value.trim()) {
+        alert('Zəhmət olmasa saat aralığını və başlığı daxil edin!');
+        return;
+      }
+
+      const editId = editIdEl.value;
+      if (editId) {
+        // Update existing
+        const item = store.schedule.find(x => x.id === editId);
+        if (item) {
+          item.time = timeEl.value.trim();
+          item.title = titleEl.value.trim();
+          item.desc = descEl.value.trim();
+        }
+        cancelEditSchedule();
+      } else {
+        // Add new
+        store.schedule.push({
+          id: 't_' + Date.now(),
+          time: timeEl.value.trim(),
+          title: titleEl.value.trim(),
+          desc: descEl.value.trim() || 'Fərdi Rejim Tapşırığı',
+          checked: false
+        });
+        timeEl.value = '';
+        titleEl.value = '';
+        descEl.value = '';
+      }
+
+      saveStore();
+    }
+
+    function startEditSchedule(id) {
+      const item = store.schedule.find(x => x.id === id);
+      if (!item) return;
+
+      document.getElementById('edit-schedule-id').value = item.id;
+      document.getElementById('sched-time-input').value = item.time;
+      document.getElementById('sched-title-input').value = item.title;
+      document.getElementById('sched-desc-input').value = item.desc;
+
+      document.getElementById('schedule-form-title').innerText = '✏️ Rejimi Redaktə Et:';
+      document.getElementById('sched-submit-btn').innerText = 'Yadda Saxla';
+      document.getElementById('sched-cancel-btn').style.display = 'inline-flex';
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function cancelEditSchedule() {
+      document.getElementById('edit-schedule-id').value = '';
+      document.getElementById('sched-time-input').value = '';
+      document.getElementById('sched-title-input').value = '';
+      document.getElementById('sched-desc-input').value = '';
+
+      document.getElementById('schedule-form-title').innerText = '➕ Yeni Saat & Rejim Əlavə Et:';
+      document.getElementById('sched-submit-btn').innerText = '+ Əlavə Et';
+      document.getElementById('sched-cancel-btn').style.display = 'none';
+    }
+
+    function deleteScheduleItem(id) {
+      if (confirm('Bu rejimi silmək istədiyinizdən əminsiniz?')) {
+        store.schedule = store.schedule.filter(x => x.id !== id);
+        saveStore();
+      }
+    }
+
+    /* ==========================================
+       CALENDAR
+       ========================================== */
+    function renderCalendar() {
+      const container = document.getElementById('calendar-grid-container');
+      const countBadge = document.getElementById('cal-completed-count');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const startDate = new Date(2026, 9, 8);
+      let completedCount = 0;
+
+      for (let i = 0; i < 84; i++) {
+        const curr = new Date(startDate);
+        curr.setDate(startDate.getDate() + i);
+        const dateStr = curr.toISOString().split('T')[0];
+        const dayNum = i + 1;
+        const isDone = !!store.calendarDays[dateStr];
+        if (isDone) completedCount++;
+
+        const dayEl = document.createElement('div');
+        dayEl.className = `cal-day ${isDone ? 'done' : ''} ${i === 0 ? 'today' : ''}`;
+        dayEl.title = dateStr;
+        dayEl.innerHTML = `
+          <div style="font-size: 0.68rem; opacity: 0.8;">G${dayNum}</div>
+          <div style="font-size: 0.82rem; font-weight: 800;">${curr.getDate()} ${curr.toLocaleString('az-AZ', { month: 'short' })}</div>
+          <div style="font-size: 0.72rem; margin-top: 0.15rem;">${isDone ? '✅' : '⚪'}</div>
+        `;
+        dayEl.onclick = () => toggleCalendarDay(dateStr);
+        container.appendChild(dayEl);
+      }
+
+      if (countBadge) countBadge.innerText = `${completedCount} / 84 gün tamamlandı (${Math.round((completedCount/84)*100)}%)`;
+    }
+
+    function toggleCalendarDay(dateStr) {
+      if (store.calendarDays[dateStr]) {
+        delete store.calendarDays[dateStr];
+      } else {
+        store.calendarDays[dateStr] = true;
+      }
+      saveStore();
+    }
+
+    /* ==========================================
+       HEALTH & FERRITIN
+       ========================================== */
+    function renderHealth() {
+      const list = document.getElementById('blood-test-list');
+      if (!list) return;
+      list.innerHTML = '';
+
+      if (store.bloodTests.length === 0) {
+        list.innerHTML = '<div style="font-size: 0.8rem; color: var(--text-light); padding: 0.5rem;">Hələ analiz qeyd edilməyib.</div>';
+        return;
+      }
+
+      store.bloodTests.forEach(test => {
+        const row = document.createElement('div');
+        row.className = 'item-row';
+        row.style.padding = '0.5rem 0.75rem';
+        row.innerHTML = `
+          <div>
+            <span style="font-weight: 700; color: var(--text-main);">${test.date}:</span>
+            <span style="font-weight: 800; color: var(--primary); margin-left: 0.5rem;">${test.value} ng/mL</span>
+          </div>
+          <button class="btn btn-danger btn-sm" onclick="deleteBloodTest('${test.id}')">Sil</button>
+        `;
+        list.appendChild(row);
+      });
+    }
+
+    function addBloodTest() {
+      const dateEl = document.getElementById('health-date-input');
+      const valEl = document.getElementById('health-val-input');
+      if (!dateEl.value || !valEl.value) {
+        alert('Zəhmət olmasa tarixi və ferritin dəyərini daxil edin!');
+        return;
+      }
+      store.bloodTests.push({
+        id: 'bt_' + Date.now(),
+        date: dateEl.value,
+        value: Number(valEl.value)
+      });
+      dateEl.value = '';
+      valEl.value = '';
+      saveStore();
+    }
+
+    function deleteBloodTest(id) {
+      store.bloodTests = store.bloodTests.filter(t => t.id !== id);
+      saveStore();
+    }
+
+    /* ==========================================
+       STOCK PLATFORMS
+       ========================================== */
+    function renderStock() {
+      const grid = document.getElementById('stock-platforms-grid');
+      const select = document.getElementById('stock-batch-platform');
+      const badge = document.getElementById('stock-page-badge');
+
+      let totalCurrent = store.stockPlatforms.reduce((sum, p) => sum + p.current, 0);
+      let totalTarget = store.stockPlatforms.reduce((sum, p) => sum + p.target, 0);
+      if (badge) badge.innerText = `Ümumi: ${totalCurrent} / ${totalTarget}`;
+
+      if (grid) {
+        grid.innerHTML = '';
+        store.stockPlatforms.forEach(platform => {
+          const pct = Math.min((platform.current / platform.target) * 100, 100);
+          const card = document.createElement('div');
+          card.style.background = '#f8fafc';
+          card.style.border = '1px solid var(--border-color)';
+          card.style.padding = '1rem';
+          card.style.borderRadius = '0.65rem';
+          card.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+              <span style="font-weight: 700; color: var(--text-main); font-size: 0.92rem;">${platform.name}</span>
+              <button class="btn btn-danger btn-sm" onclick="deleteStockPlatform('${platform.id}')" title="Bu platformanı sil">Sil</button>
+            </div>
+            <div style="font-size: 1.4rem; font-weight: 800; color: var(--primary); margin: 0.2rem 0;">${platform.current} <span style="font-size:0.8rem; color:var(--text-muted); font-weight:500;">/ ${platform.target} set</span></div>
+            <div class="progress-track">
+              <div class="progress-fill" style="width: ${pct}%;"></div>
+            </div>
+            <div style="display: flex; gap: 0.35rem; margin-top: 0.6rem;">
+              <button class="btn btn-secondary btn-sm" onclick="quickIncrementPlatform('${platform.id}', 1)">+1 Set</button>
+              <button class="btn btn-secondary btn-sm" onclick="quickIncrementPlatform('${platform.id}', 5)">+5 Set</button>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+      }
+
+      if (select) {
+        select.innerHTML = '';
+        store.stockPlatforms.forEach(p => {
+          const opt = document.createElement('option');
+          opt.value = p.name;
+          opt.innerText = p.name;
+          select.appendChild(opt);
+        });
+      }
+
+      // History
+      const list = document.getElementById('stock-history-list');
+      if (list) {
+        list.innerHTML = '';
+        if (store.stockHistory.length === 0) {
+          list.innerHTML = '<div style="font-size: 0.85rem; color: var(--text-light); padding: 0.5rem;">Hələ yeni yükləmə qeydi yoxdur.</div>';
+        } else {
+          store.stockHistory.slice().reverse().forEach(item => {
+            const row = document.createElement('div');
+            row.className = 'item-row';
+            row.innerHTML = `
+              <div>
+                <span style="font-weight: 700; color: var(--text-main);">${item.title}</span>
+                <span class="badge badge-primary" style="margin-left: 0.5rem;">${item.platform}</span>
+                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem;">+${item.qty} set · ${item.date}</div>
+              </div>
+              <button class="btn btn-danger btn-sm" onclick="deleteStockItem('${item.id}')">Sil</button>
+            `;
+            list.appendChild(row);
+          });
+        }
+      }
+    }
+
+    function addNewPlatform() {
+      const nameEl = document.getElementById('new-platform-name');
+      const currEl = document.getElementById('new-platform-current');
+      const targetEl = document.getElementById('new-platform-target');
+
+      if (!nameEl.value.trim()) {
+        alert('Zəhmət olmasa stok saytının adını daxil edin!');
+        return;
+      }
+
+      const name = nameEl.value.trim();
+      const current = Number(currEl.value) || 0;
+      const target = Number(targetEl.value) || 200;
+
+      store.stockPlatforms.push({
+        id: 'sp_' + Date.now(),
+        name,
+        current,
+        target
+      });
+
+      nameEl.value = '';
+      currEl.value = '';
+      targetEl.value = '';
+      saveStore();
+    }
+
+    function deleteStockPlatform(id) {
+      if (confirm('Bu platformanı silmək istədiyinizdən əminsiniz?')) {
+        store.stockPlatforms = store.stockPlatforms.filter(p => p.id !== id);
+        saveStore();
+      }
+    }
+
+    function quickIncrementPlatform(platformId, amount) {
+      const p = store.stockPlatforms.find(x => x.id === platformId);
+      if (p) {
+        p.current += amount;
+        store.stockHistory.push({
+          id: 'st_' + Date.now(),
+          title: 'Sürətli Əlavə',
+          qty: amount,
+          platform: p.name,
+          date: new Date().toISOString().split('T')[0]
+        });
+        saveStore();
+      }
+    }
+
+    function addStockBatch() {
+      const titleEl = document.getElementById('stock-batch-title');
+      const qtyEl = document.getElementById('stock-batch-qty');
+      const platformEl = document.getElementById('stock-batch-platform');
+
+      const title = titleEl.value.trim() || 'Yeni Vektor Kolleksiyası';
+      const qty = Number(qtyEl.value) || 5;
+      const platformName = platformEl.value || (store.stockPlatforms[0] && store.stockPlatforms[0].name) || 'Shutterstock';
+
+      store.stockHistory.push({
+        id: 'st_' + Date.now(),
+        title,
+        qty,
+        platform: platformName,
+        date: new Date().toISOString().split('T')[0]
+      });
+
+      const p = store.stockPlatforms.find(x => x.name === platformName);
+      if (p) {
+        p.current += qty;
+      }
+
+      titleEl.value = '';
+      qtyEl.value = '5';
+      saveStore();
+    }
+
+    function deleteStockItem(id) {
+      const item = store.stockHistory.find(x => x.id === id);
+      if (item) {
+        const p = store.stockPlatforms.find(x => x.name === item.platform);
+        if (p) {
+          p.current = Math.max(p.current - item.qty, 0);
+        }
+        store.stockHistory = store.stockHistory.filter(x => x.id !== id);
+        saveStore();
+      }
+    }
+
+    function adjustStock(amount) {
+      const shutter = getShutterstockPlatform();
+      shutter.current = Math.max(shutter.current + amount, 0);
+      saveStore();
+    }
+
+    /* ==========================================
+       ARTLAB CANDLES
+       ========================================== */
+    function renderCandles() {
+      const list = document.getElementById('candle-sales-list');
+      if (!list) return;
+      list.innerHTML = '';
+
+      if (store.candleSales.length === 0) {
+        list.innerHTML = '<div style="font-size: 0.85rem; color: var(--text-light); padding: 0.5rem;">Hələ satış qeyd edilməyib. İlk satışı qeyd et! 🕯️</div>';
+        return;
+      }
+
+      store.candleSales.forEach(sale => {
+        const row = document.createElement('div');
+        row.className = 'item-row';
+        row.innerHTML = `
+          <div>
+            <div style="font-weight: 700; color: var(--text-main);">${sale.customer} · <span style="color:#10b981;">${sale.price} AZN</span></div>
+            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.15rem;">${sale.scent} · ${sale.date}</div>
+          </div>
+          <button class="btn btn-danger btn-sm" onclick="deleteCandleSale('${sale.id}')">Sil</button>
+        `;
+        list.appendChild(row);
+      });
+    }
+
+    function addCandleSale() {
+      const custEl = document.getElementById('candle-customer');
+      const scentEl = document.getElementById('candle-scent');
+      const priceEl = document.getElementById('candle-price');
+      const dateEl = document.getElementById('candle-date');
+
+      if (!custEl.value || !priceEl.value) {
+        alert('Müştəri adı və qiyməti daxil edin!');
+        return;
+      }
+
+      store.candleSales.push({
+        id: 'c_' + Date.now(),
+        customer: custEl.value.trim(),
+        scent: scentEl.value.trim() || 'Xüsusi Qoxulu Şam',
+        price: Number(priceEl.value),
+        date: dateEl.value || new Date().toISOString().split('T')[0]
+      });
+
+      custEl.value = '';
+      scentEl.value = '';
+      priceEl.value = '';
+      dateEl.value = '';
+      saveStore();
+    }
+
+    function deleteCandleSale(id) {
+      store.candleSales = store.candleSales.filter(s => s.id !== id);
+      saveStore();
+    }
+
+    /* ==========================================
+       DEBT & SALARY
+       ========================================== */
+    function renderDebt() {
+      const targetDisp = document.getElementById('debt-target-display');
+      const paidDisp = document.getElementById('debt-paid-display');
+      const remainDisp = document.getElementById('debt-remain-display');
+      const headerBadge = document.getElementById('debt-header-badge');
+
+      if (targetDisp) targetDisp.innerText = store.debtTarget + ' AZN';
+      if (paidDisp) paidDisp.innerText = store.debtPaid + ' AZN';
+      if (remainDisp) remainDisp.innerText = Math.max(store.debtTarget - store.debtPaid, 0);
+      if (headerBadge) headerBadge.innerText = `${store.debtPaid} / ${store.debtTarget} AZN Ödənilib`;
+
+      const list = document.getElementById('debt-history-list');
+      if (!list) return;
+      list.innerHTML = '';
+
+      if (store.debtHistory.length === 0) {
+        list.innerHTML = '<div style="font-size: 0.85rem; color: var(--text-light); padding: 0.5rem;">Hələ ödəniş qeyd edilməyib.</div>';
+        return;
+      }
+
+      store.debtHistory.forEach(d => {
+        const row = document.createElement('div');
+        row.className = 'item-row';
+        row.innerHTML = `
+          <div>
+            <span style="font-weight: 700; color: var(--text-main);">${d.note}</span>
+            <span style="font-weight: 800; color: #10b981; margin-left: 0.5rem;">+${d.amount} AZN</span>
+            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.15rem;">${d.date}</div>
+          </div>
+          <button class="btn btn-danger btn-sm" onclick="deleteDebtPayment('${d.id}')">Sil</button>
+        `;
+        list.appendChild(row);
+      });
+    }
+
+    function addDebtPayment() {
+      const noteEl = document.getElementById('debt-note');
+      const amountEl = document.getElementById('debt-amount');
+      const dateEl = document.getElementById('debt-date');
+
+      if (!amountEl.value) {
+        alert('Ödəniş məbləğini daxil edin!');
+        return;
+      }
+
+      const amount = Number(amountEl.value);
+      store.debtHistory.push({
+        id: 'd_' + Date.now(),
+        note: noteEl.value.trim() || 'Borc Ödənişi',
+        amount,
+        date: dateEl.value || new Date().toISOString().split('T')[0]
+      });
+
+      store.debtPaid += amount;
+      noteEl.value = '';
+      amountEl.value = '';
+      dateEl.value = '';
+      saveStore();
+    }
+
+    function deleteDebtPayment(id) {
+      const payment = store.debtHistory.find(p => p.id === id);
+      if (payment) {
+        store.debtPaid = Math.max(store.debtPaid - payment.amount, 0);
+        store.debtHistory = store.debtHistory.filter(p => p.id !== id);
+        saveStore();
+      }
+    }
+
+    /* ==========================================
+       BOOKS
+       ========================================== */
+    function renderBooks() {
+      const container = document.getElementById('books-list-container');
+      const badge = document.getElementById('books-completed-badge');
+      if (!container) return;
+      container.innerHTML = '';
+
+      let finishedCount = 0;
+
+      if (store.books.length === 0) {
+        container.innerHTML = '<div style="font-size: 0.9rem; color: var(--text-light); padding: 1rem; text-align:center;">Hələ kitab əlavə edilməyib. Yuxarıdan oxumaq istədiyin kitabı əlavə et! 📖</div>';
+      } else {
+        store.books.forEach(book => {
+          const remain = Math.max(book.totalPages - book.readPages, 0);
+          const pct = Math.min((book.readPages / book.totalPages) * 100, 100);
+          const isDone = book.readPages >= book.totalPages;
+          if (isDone) finishedCount++;
+
+          const card = document.createElement('div');
+          card.style.background = '#ffffff';
+          card.style.border = '1px solid var(--border-color)';
+          card.style.padding = '1.25rem';
+          card.style.borderRadius = '0.75rem';
+          card.style.boxShadow = '0 1px 3px rgba(0,0,0,0.02)';
+
+          card.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+              <div>
+                <span style="font-weight: 800; font-size: 1.05rem; color: var(--text-main);">${book.title}</span>
+                ${isDone ? '<span class="badge badge-success" style="margin-left:0.5rem;">Bitirildi 🎉</span>' : ''}
+              </div>
+              <button class="btn btn-danger btn-sm" onclick="deleteBook('${book.id}')">Kitabı Sil</button>
+            </div>
+
+            <div style="display: flex; gap: 1.5rem; font-size: 0.88rem; color: var(--text-muted); margin: 0.5rem 0;">
+              <div>Ümumi: <b>${book.totalPages}</b> səhifə</div>
+              <div>Oxunub: <b style="color:var(--primary);">${book.readPages}</b> səhifə</div>
+              <div>Qalan: <b style="color:${remain === 0 ? '#10b981' : '#e11d48'};">${remain}</b> səhifə</div>
+              <div>İrəliləyiş: <b>${Math.round(pct)}%</b></div>
+            </div>
+
+            <div class="progress-track">
+              <div class="progress-fill" style="width: ${pct}%; background: ${isDone ? '#10b981' : 'var(--primary)'};"></div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap;">
+              <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-main);">Oxunan səhifəni artır:</span>
+              <button class="btn btn-secondary btn-sm" onclick="addBookPages('${book.id}', 5)">+5 Səhifə</button>
+              <button class="btn btn-secondary btn-sm" onclick="addBookPages('${book.id}', 10)">+10 Səhifə</button>
+              <button class="btn btn-secondary btn-sm" onclick="addBookPages('${book.id}', 20)">+20 Səhifə</button>
+              <div style="display: flex; gap: 0.3rem; margin-left: auto;">
+                <input type="number" id="custom-page-input-${book.id}" placeholder="Xüsusi səh (məs: 15)" class="input-field" style="width: 140px; padding: 0.35rem 0.6rem; font-size: 0.8rem;">
+                <button class="btn btn-primary btn-sm" onclick="addCustomBookPages('${book.id}')">Daxil et</button>
+              </div>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+      }
+
+      if (badge) badge.innerText = `${finishedCount} / 2 Kitab bitirildi`;
+    }
+
+    function addNewBook() {
+      const titleEl = document.getElementById('book-title-input');
+      const totalEl = document.getElementById('book-total-pages-input');
+      const currEl = document.getElementById('book-current-pages-input');
+
+      if (!titleEl.value.trim() || !totalEl.value) {
+        alert('Kitabın adını və ümumi səhifə sayını daxil edin!');
+        return;
+      }
+
+      const total = Number(totalEl.value);
+      const read = Number(currEl.value) || 0;
+
+      store.books.push({
+        id: 'bk_' + Date.now(),
+        title: titleEl.value.trim(),
+        totalPages: total,
+        readPages: Math.min(read, total)
+      });
+
+      titleEl.value = '';
+      totalEl.value = '';
+      currEl.value = '0';
+      saveStore();
+    }
+
+    function deleteBook(id) {
+      if (confirm('Bu kitabı silmək istədiyinizdən əminsiniz?')) {
+        store.books = store.books.filter(b => b.id !== id);
+        saveStore();
+      }
+    }
+
+    function addBookPages(bookId, amount) {
+      const book = store.books.find(b => b.id === bookId);
+      if (book) {
+        book.readPages = Math.min(book.readPages + amount, book.totalPages);
+        saveStore();
+      }
+    }
+
+    function addCustomBookPages(bookId) {
+      const input = document.getElementById(`custom-page-input-${bookId}`);
+      if (input && input.value) {
+        const amount = Number(input.value);
+        addBookPages(bookId, amount);
+        input.value = '';
+      }
+    }
+
+    /* ==========================================
+       GERMAN CHALLENGES & XP SYSTEM
+       ========================================== */
+    function renderGerman() {
+      const xpBadge = document.getElementById('german-xp-badge');
+      const levelBadge = document.getElementById('german-level-badge');
+      const challengeDesc = document.getElementById('current-challenge-desc');
+      const totalCountBadge = document.getElementById('challenges-total-count');
+
+      if (xpBadge) xpBadge.innerText = `XP: ${store.germanXP}`;
+      if (levelBadge) {
+        let lvl = 'A1 Başlanğıc';
+        if (store.germanXP >= 300) lvl = 'A1 Orta';
+        if (store.germanXP >= 600) lvl = 'A1 Usta';
+        if (store.germanXP >= 1000) lvl = 'A2 Yolunda 🚀';
+        levelBadge.innerText = `Səviyyə: ${lvl}`;
+      }
+
+      const currentChallengeText = challengePool[store.currentChallengeIdx % challengePool.length];
+      if (challengeDesc) challengeDesc.innerText = currentChallengeText;
+      if (totalCountBadge) totalCountBadge.innerText = `${store.completedChallenges.length} Tamamlandı`;
+
+      // Completed challenges
+      const histList = document.getElementById('completed-challenges-list');
+      if (histList) {
+        histList.innerHTML = '';
+        if (store.completedChallenges.length === 0) {
+          histList.innerHTML = '<div style="font-size: 0.85rem; color: var(--text-light); padding: 0.8rem; text-align:center;">Hələ tamamlanmış çelənc yoxdur. Yuxarıdakı çelənci et və ilk qələbəni qazan! 🇩🇪</div>';
+        } else {
+          store.completedChallenges.slice().reverse().forEach(c => {
+            const card = document.createElement('div');
+            card.style.background = '#f8fafc';
+            card.style.border = '1px solid var(--border-color)';
+            card.style.padding = '0.75rem 1rem';
+            card.style.borderRadius = '0.5rem';
+            card.style.display = 'flex';
+            card.style.justifyContent = 'space-between';
+            card.style.alignItems = 'center';
+            card.innerHTML = `
+              <div>
+                <div style="font-weight: 700; font-size: 0.9rem; color: var(--text-main);">✅ ${c.text}</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.15rem;">📅 ${c.date}</div>
+              </div>
+              <div style="display:flex; align-items:center; gap:0.5rem;">
+                <span class="badge badge-success">+30 XP</span>
+                <button class="btn btn-danger btn-sm" onclick="deleteCompletedChallenge('${c.id}')">Sil</button>
+              </div>
+            `;
+            histList.appendChild(card);
+          });
+        }
+      }
+    }
+
+    function generateNewRandomChallenge() {
+      store.currentChallengeIdx = Math.floor(Math.random() * challengePool.length);
+      saveStore();
+    }
+
+    function completeCurrentChallenge() {
+      const challengeText = challengePool[store.currentChallengeIdx % challengePool.length];
+      store.germanXP += 30;
+      store.completedChallenges.push({
+        id: 'cc_' + Date.now(),
+        text: challengeText,
+        date: new Date().toISOString().split('T')[0]
+      });
+      generateNewRandomChallenge();
+      saveStore();
+      alert('🎉 Əla iş! +30 XP qazandın!');
+    }
+
+    function addCustomChallenge() {
+      const input = document.getElementById('custom-challenge-input');
+      if (!input.value.trim()) {
+        alert('Zəhmət olmasa çelənci yazın!');
+        return;
+      }
+      challengePool.push(input.value.trim() + " (+30 XP)");
+      input.value = '';
+      generateNewRandomChallenge();
+      saveStore();
+      alert('Yeni çelənc hovuza əlavə edildi!');
+    }
+
+    function deleteCompletedChallenge(id) {
+      store.completedChallenges = store.completedChallenges.filter(c => c.id !== id);
+      saveStore();
+    }
+
+    /* ==========================================
+       JOURNAL
+       ========================================== */
+    function renderJournal() {
+      const list = document.getElementById('journal-history-list');
+      if (!list) return;
+      list.innerHTML = '';
+
+      if (store.journalEntries.length === 0) {
+        list.innerHTML = '<div style="font-size: 0.85rem; color: var(--text-light); padding: 0.5rem;">Hələ jurnal qeydi yoxdur. Günün qələbələrini ilk sən yaz! ✍️</div>';
+        return;
+      }
+
+      store.journalEntries.slice().reverse().forEach(entry => {
+        const card = document.createElement('div');
+        card.style.background = '#f8fafc';
+        card.style.border = '1px solid var(--border-color)';
+        card.style.padding = '1rem';
+        card.style.borderRadius = '0.65rem';
+        card.style.marginBottom = '0.75rem';
+        card.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <span style="font-weight: 800; color: var(--primary);">📅 ${entry.date}</span>
+            <button class="btn btn-danger btn-sm" onclick="deleteJournalEntry('${entry.id}')">Sil</button>
+          </div>
+          <div style="font-size: 0.85rem; margin-bottom: 0.35rem;"><b>🌟 Zəfərlər:</b> ${entry.wins || '—'}</div>
+          <div style="font-size: 0.85rem; margin-bottom: 0.35rem;"><b>💡 Dərslər:</b> ${entry.lessons || '—'}</div>
+          <div style="font-size: 0.85rem; color: var(--primary);"><b>🎯 Sabahın Prioriteti:</b> ${entry.priority || '—'}</div>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    function saveJournalEntry() {
+      const dateEl = document.getElementById('journal-date');
+      const winsEl = document.getElementById('journal-wins');
+      const lessonsEl = document.getElementById('journal-lessons');
+      const prioEl = document.getElementById('journal-priority');
+
+      const date = dateEl.value || new Date().toISOString().split('T')[0];
+      const wins = winsEl.value.trim();
+      const lessons = lessonsEl.value.trim();
+      const priority = prioEl.value.trim();
+
+      if (!wins && !lessons && !priority) {
+        alert('Zəhmət olmasa ən azı bir xanaya qeyd yazın!');
+        return;
+      }
+
+      store.journalEntries.push({
+        id: 'j_' + Date.now(),
+        date,
+        wins,
+        lessons,
+        priority
+      });
+
+      winsEl.value = '';
+      lessonsEl.value = '';
+      prioEl.value = '';
+      saveStore();
+    }
+
+    function deleteJournalEntry(id) {
+      store.journalEntries = store.journalEntries.filter(j => j.id !== id);
+      saveStore();
+    }
+
+    /* Quick helper actions */
+    function adjustWater(amount) {
+      store.todayWater = Math.max(Number((store.todayWater + amount).toFixed(2)), 0);
+      saveStore();
+    }
+
+    function adjustSteps(amount) {
+      store.todaySteps = Math.max(store.todaySteps + amount, 0);
+      saveStore();
+    }
+
+    function toggleMedsToday() {
+      store.medsTaken = !store.medsTaken;
+      saveStore();
+    }
+
+    function resetAllDataConfirm() {
+      if (confirm('Bütün məlumatları sıfırlamaq istədiyinizdən əminsiniz?')) {
+        localStorage.removeItem(STORAGE_KEY);
+        location.reload();
+      }
+    }
+
+    // Init
+    window.addEventListener('DOMContentLoaded', () => {
+      loadStore();
+      renderAll();
+      renderRandomQuote();
+
+      // Set default dates
+      const todayStr = new Date().toISOString().split('T')[0];
+      const jDate = document.getElementById('journal-date');
+      const hDate = document.getElementById('health-date-input');
+      const cDate = document.getElementById('candle-date');
+      const dDate = document.getElementById('debt-date');
+      if (jDate) jDate.value = todayStr;
+      if (hDate) hDate.value = todayStr;
+      if (cDate) cDate.value = todayStr;
+      if (dDate) dDate.value = todayStr;
+    });
+  </script>
+</body>
+</html>
